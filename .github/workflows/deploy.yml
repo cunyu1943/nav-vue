@@ -6,11 +6,9 @@ on:
   # 支持在 Actions 页面手动触发
   workflow_dispatch:
 
-# GitHub Pages 部署所需权限
+# 推送 gh-pages 分支需要写权限
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 # 同一时间只允许一个部署任务，新推送取消进行中的旧部署
 concurrency:
@@ -18,7 +16,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -42,19 +40,16 @@ jobs:
 
       - name: Build
         run: pnpm build
+        env:
+          # base 路径自动跟随仓库名（项目页以 /<repo>/ 子路径访问）；
+          # 仓库改名后无需改任何配置
+          VITE_BASE: /${{ github.event.repository.name }}/
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          # gh-pages 分支只保留最新一次提交，避免历史无限膨胀
+          force_orphan: true
+          commit_message: 'Deploy: ${{ github.event.head_commit.message }}'

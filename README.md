@@ -149,25 +149,26 @@ pnpm preview
 
 ## 📦 部署到 GitHub Pages
 
-### 方式一：GitHub Actions 自动部署（推荐）
+### 方式一：GitHub Actions 自动部署到 gh-pages 分支（推荐）
 
-仓库已内置流水线（`.github/workflows/deploy.yml`），推送 `main` 分支即自动执行：**安装 → 单元测试 → 构建 → 发布**。
+仓库已内置流水线（`.github/workflows/deploy.yml`），推送 `main` 分支即自动执行：**安装 → 单元测试 → 构建 → 推送 dist 到 gh-pages 分支**。
 
 1. 把仓库推送到 GitHub
-2. 进入仓库 **Settings → Pages → Build and deployment → Source**，选择 **GitHub Actions**
-3. 之后每次 push 到 `main`（或在 Actions 页面手动触发 `workflow_dispatch`）都会自动发布
+2. 进入仓库 **Settings → Pages → Build and deployment → Source**，选择 **Deploy from a branch**
+3. 分支选择 **gh-pages**、目录 **/(root)**，保存
+4. 之后每次 push 到 `main`（或在 Actions 页面手动触发 `workflow_dispatch`），流水线都会自动把最新构建推送到 gh-pages 分支并发布
 
-> 流水线使用 pnpm 官方 Action（`pnpm/action-setup@v4`），版本自动读取 `package.json` 的 `packageManager` 字段，无需在 CI 中写死。
+> - 工作流使用 [peaceiris/actions-gh-pages](https://github.com/peaceiris/actions-gh-pages) 推送分支，使用内置 `GITHUB_TOKEN`，无需额外配置密钥；`force_orphan: true` 让 gh-pages 只保留最新一次提交
+> - pnpm 版本自动读取 `package.json` 的 `packageManager` 字段，无需在 CI 中写死
+> - 首次部署时 gh-pages 分支尚不存在，**先跑一次流水线生成该分支**，再去 Settings 选择
 
 ### 关于 base 路径
 
 GitHub Pages 项目页的访问地址是 `https://<user>.github.io/<repo>/`，资源需要带仓库名前缀：
 
-- **仓库保持默认名 `vue-nav`**：零配置，构建 base 默认就是 `/vue-nav/`
-- **仓库改名了**：两种解决方式任选
-  - 构建时通过环境变量覆盖：`VITE_BASE=/<新仓库名>/ pnpm build`（CI 中在 Build 步骤前设置 env 即可）
-  - 或直接修改 `vite.config.ts` 中的默认值
-- **使用自定义域名 / 用户主页**（`<user>.github.io` 根路径）：设 `VITE_BASE=/`
+- **CI 自动处理**：流水线的构建步骤会设置 `VITE_BASE=/<仓库名>/`（取自 `github.event.repository.name`），**仓库改名后无需改任何配置**
+- **本地构建**：默认 base 为 `/vue-nav/`；仓库改名后本地构建用 `VITE_BASE=/<新仓库名>/ pnpm build` 覆盖，或直接修改 `vite.config.ts` 的默认值
+- **使用自定义域名 / 用户主页**（`<user>.github.io` 根路径）：本地设 `VITE_BASE=/`，CI 中把 env 改为 `VITE_BASE: /`
 
 ### 方式二：本地构建手动部署
 
