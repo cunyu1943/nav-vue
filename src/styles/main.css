@@ -1,0 +1,81 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+/* ===== 断点覆盖 =====
+   与 src/composables/useColumnCount.ts 保持一致：
+   >=1100px 5 列 / 900-1099 4 列 / 640-899 3 列 / 480-639 2 列 / <480 1 列 */
+@theme {
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 640px;
+  --breakpoint-lg: 900px;
+  --breakpoint-xl: 1100px;
+}
+
+:root {
+  /* 固定顶栏高度（供吸顶偏移等使用） */
+  --header-height: 56px;
+}
+
+/* ===== Nuxt UI 语义色映射 =====
+   品牌主色 + 参考一为导航的明暗观感（页面深底、卡片浅一档、弱边框）。
+   覆盖须位于 @import "@nuxt/ui" 之后；暗色切换由 <html class="dark"> 驱动 */
+:root {
+  --ui-primary: #4c6ef5;
+
+  --ui-bg: #f5f6f8;
+  --ui-bg-muted: #eef0f2;
+  --ui-bg-elevated: #ffffff;
+  --ui-bg-accented: #e8eaee;
+  --ui-bg-inverted: #1d2026;
+
+  --ui-border: #e8e9eb;
+  --ui-border-muted: #eef0f2;
+  --ui-border-accented: #d9dbde;
+
+  --ui-text: #303133;
+  --ui-text-muted: #6f757c;
+  --ui-text-dimmed: #9aa3af;
+  --ui-text-highlighted: #1a1c20;
+  --ui-text-inverted: #ffffff;
+}
+
+.dark {
+  --ui-primary: #6a8dff;
+
+  --ui-bg: #161616;
+  --ui-bg-muted: #1a1a1a;
+  --ui-bg-elevated: #1d1d1f;
+  --ui-bg-accented: #262628;
+  --ui-bg-inverted: #f5f6f8;
+
+  --ui-border: #262628;
+  --ui-border-muted: #202022;
+  --ui-border-accented: #333336;
+
+  --ui-text: #e8eaee;
+  --ui-text-muted: #a3a7ad;
+  --ui-text-dimmed: #7d838c;
+  --ui-text-highlighted: #f5f7fa;
+  --ui-text-inverted: #161616;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--ui-bg);
+  color: var(--ui-text);
+  font-family:
+    'PingFang SC',
+    'Microsoft YaHei',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}

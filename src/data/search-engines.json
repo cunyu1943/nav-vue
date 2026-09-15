@@ -1,0 +1,40 @@
+{
+  "engines": [
+    {
+      "id": "site",
+      "name": "站内",
+      "url": "",
+      "icon": "engines/site.svg"
+    },
+    {
+      "id": "bing",
+      "name": "必应",
+      "url": "https://www.bing.com/search?q=%s",
+      "icon": "engines/bing.svg"
+    },
+    {
+      "id": "baidu",
+      "name": "百度",
+      "url": "https://www.baidu.com/s?wd=%s",
+      "icon": "engines/baidu.svg"
+    },
+    {
+      "id": "google",
+      "name": "Google",
+      "url": "https://www.google.com/search?q=%s",
+      "icon": "engines/google.svg"
+    },
+    {
+      "id": "duckduckgo",
+      "name": "DuckDuckGo",
+      "url": "https://duckduckgo.com/?q=%s",
+      "icon": "engines/duckduckgo.svg"
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "url": "https://github.com/search?q=%s",
+      "icon": "engines/github.svg"
+    }
+  ]
+}

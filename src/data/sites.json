@@ -1,0 +1,433 @@
+{
+  "categories": [
+    {
+      "id": "recommend",
+      "name": "常用推荐",
+      "icon": "star",
+      "sites": [
+        {
+          "name": "Vue.js 官方文档",
+          "url": "https://cn.vuejs.org",
+          "description": "Vue 3 渐进式 JavaScript 框架官方中文文档",
+          "tags": [
+            "前端",
+            "框架"
+          ]
+        },
+        {
+          "name": "Vite",
+          "url": "https://cn.vite.dev",
+          "description": "下一代前端构建工具，极快的开发体验",
+          "tags": [
+            "前端",
+            "构建工具"
+          ]
+        },
+        {
+          "name": "GitHub",
+          "url": "https://github.com",
+          "description": "全球最大的代码托管与开源协作平台",
+          "tags": [
+            "代码",
+            "开源"
+          ]
+        },
+        {
+          "name": "Vue.js 官方文档",
+          "url": "https://cn.vuejs.org",
+          "description": "Vue 3 渐进式 JavaScript 框架官方中文文档",
+          "tags": [
+            "前端",
+            "框架"
+          ]
+        },
+        {
+          "name": "Vite",
+          "url": "https://cn.vite.dev",
+          "description": "下一代前端构建工具，极快的开发体验",
+          "tags": [
+            "前端",
+            "构建工具"
+          ]
+        },
+        {
+          "name": "GitHub",
+          "url": "https://github.com",
+          "description": "全球最大的代码托管与开源协作平台",
+          "tags": [
+            "代码",
+            "开源"
+          ]
+        },
+        {
+          "name": "Vue.js 官方文档",
+          "url": "https://cn.vuejs.org",
+          "description": "Vue 3 渐进式 JavaScript 框架官方中文文档",
+          "tags": [
+            "前端",
+            "框架"
+          ]
+        },
+        {
+          "name": "Vite",
+          "url": "https://cn.vite.dev",
+          "description": "下一代前端构建工具，极快的开发体验",
+          "tags": [
+            "前端",
+            "构建工具"
+          ]
+        },
+        {
+          "name": "GitHub",
+          "url": "https://github.com",
+          "description": "全球最大的代码托管与开源协作平台",
+          "tags": [
+            "代码",
+            "开源"
+          ]
+        },
+        {
+          "name": "Vue.js 官方文档",
+          "url": "https://cn.vuejs.org",
+          "description": "Vue 3 渐进式 JavaScript 框架官方中文文档",
+          "tags": [
+            "前端",
+            "框架"
+          ]
+        },
+        {
+          "name": "Vite",
+          "url": "https://cn.vite.dev",
+          "description": "下一代前端构建工具，极快的开发体验",
+          "tags": [
+            "前端",
+            "构建工具"
+          ]
+        },
+        {
+          "name": "GitHub",
+          "url": "https://github.com",
+          "description": "全球最大的代码托管与开源协作平台",
+          "tags": [
+            "代码",
+            "开源"
+          ]
+        },
+        {
+          "name": "Vue.js 官方文档",
+          "url": "https://cn.vuejs.org",
+          "description": "Vue 3 渐进式 JavaScript 框架官方中文文档",
+          "tags": [
+            "前端",
+            "框架"
+          ]
+        },
+        {
+          "name": "Vite",
+          "url": "https://cn.vite.dev",
+          "description": "下一代前端构建工具，极快的开发体验",
+          "tags": [
+            "前端",
+            "构建工具"
+          ]
+        },
+        {
+          "name": "GitHub",
+          "url": "https://github.com",
+          "description": "全球最大的代码托管与开源协作平台",
+          "tags": [
+            "代码",
+            "开源"
+          ]
+        },
+        {
+          "name": "MDN Web Docs",
+          "url": "https://developer.mozilla.org/zh-CN/",
+          "description": "Web 技术权威文档，HTML/CSS/JS 开发者必备",
+          "tags": [
+            "文档",
+            "Web"
+          ]
+        },
+        {
+          "name": "Stack Overflow",
+          "url": "https://stackoverflow.com",
+          "description": "全球最大的程序员问答社区",
+          "tags": [
+            "问答",
+            "社区"
+          ]
+        },
+        {
+          "name": "pnpm",
+          "url": "https://pnpm.io/zh/",
+          "description": "快速、节省磁盘空间的包管理工具",
+          "tags": [
+            "前端",
+            "工具"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tools",
+      "name": "常用工具",
+      "icon": "tool",
+      "sites": [
+        {
+          "name": "Can I Use",
+          "url": "https://caniuse.com",
+          "description": "查询浏览器对各项 Web 特性的兼容性支持",
+          "tags": [
+            "前端",
+            "兼容性"
+          ]
+        },
+        {
+          "name": "Regex101",
+          "url": "https://regex101.com",
+          "description": "在线正则表达式调试与可视化工具",
+          "tags": [
+            "正则",
+            "调试"
+          ]
+        },
+        {
+          "name": "TinyPNG",
+          "url": "https://tinypng.com",
+          "description": "智能压缩 PNG 与 JPEG 图片，肉眼无损",
+          "tags": [
+            "图片",
+            "压缩"
+          ]
+        },
+        {
+          "name": "JSON 格式化",
+          "url": "https://jsonhero.io",
+          "description": "在线 JSON 查看、校验与格式化工具",
+          "tags": [
+            "JSON",
+            "开发"
+          ]
+        },
+        {
+          "name": "JSON 格式化",
+          "url": "https://jsonhero.io",
+          "description": "在线 JSON 查看、校验与格式化工具",
+          "tags": [
+            "JSON",
+            "开发"
+          ]
+        },
+        {
+          "name": "Excalidraw",
+          "url": "https://excalidraw.com",
+          "description": "手绘风格的在线白板与图表绘制工具",
+          "tags": [
+            "绘图",
+            "白板"
+          ]
+        },
+        {
+          "name": "Xiaohongshu 表情包",
+          "url": "https://www.fabiaoqing.com",
+          "description": "发表情——海量表情包搜索与下载",
+          "tags": [
+            "表情",
+            "娱乐"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "learn",
+      "name": "学习教程",
+      "icon": "book",
+      "sites": [
+        {
+          "name": "掘金",
+          "url": "https://juejin.cn",
+          "description": "面向开发者的中文技术社区与知识平台",
+          "tags": [
+            "技术",
+            "社区"
+          ]
+        },
+        {
+          "name": "freeCodeCamp",
+          "url": "https://www.freecodecamp.org/chinese/",
+          "description": "免费开源的编程学习平台，含中文课程",
+          "tags": [
+            "课程",
+            "编程"
+          ]
+        },
+        {
+          "name": "菜鸟教程",
+          "url": "https://www.runoob.com",
+          "description": "学的不仅是技术，更是梦想——入门级编程教程大全",
+          "tags": [
+            "教程",
+            "入门"
+          ]
+        },
+        {
+          "name": "TypeScript Handbook",
+          "url": "https://www.typescriptlang.org/zh/docs/",
+          "description": "TypeScript 官方中文手册",
+          "tags": [
+            "TS",
+            "文档"
+          ]
+        },
+        {
+          "name": "现代 JavaScript 教程",
+          "url": "https://zh.javascript.info",
+          "description": "以现代 JavaScript 为标准的从入门到进阶教程",
+          "tags": [
+            "JS",
+            "教程"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "design",
+      "name": "设计素材",
+      "icon": "palette",
+      "sites": [
+        {
+          "name": "Dribbble",
+          "url": "https://dribbble.com",
+          "description": "全球设计师作品分享与灵感社区",
+          "tags": [
+            "设计",
+            "灵感"
+          ]
+        },
+        {
+          "name": "Figma",
+          "url": "https://www.figma.com",
+          "description": "浏览器里的协作式 UI 设计工具",
+          "tags": [
+            "设计",
+            "工具"
+          ]
+        },
+        {
+          "name": "unDraw",
+          "url": "https://undraw.co",
+          "description": "免费可商用、可自定义配色的扁平插画库",
+          "tags": [
+            "插画",
+            "免费"
+          ]
+        },
+        {
+          "name": "Iconfont",
+          "url": "https://www.iconfont.cn",
+          "description": "阿里巴巴矢量图标库，海量免费图标",
+          "tags": [
+            "图标",
+            "素材"
+          ]
+        },
+        {
+          "name": "Coolors",
+          "url": "https://coolors.co",
+          "description": "超快速的配色方案生成器",
+          "tags": [
+            "配色",
+            "工具"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "news",
+      "name": "社区资讯",
+      "icon": "news",
+      "sites": [
+        {
+          "name": "V2EX",
+          "url": "https://www.v2ex.com",
+          "description": "创意工作者们的社区，关于技术和生活",
+          "tags": [
+            "社区",
+            "技术"
+          ]
+        },
+        {
+          "name": "Hacker News",
+          "url": "https://news.ycombinator.com",
+          "description": "科技创业与编程圈的每日热点",
+          "tags": [
+            "资讯",
+            "英文"
+          ]
+        },
+        {
+          "name": "InfoQ 中文站",
+          "url": "https://www.infoq.cn",
+          "description": "促进软件开发领域知识与创新的传播",
+          "tags": [
+            "技术",
+            "资讯"
+          ]
+        },
+        {
+          "name": "Product Hunt",
+          "url": "https://www.producthunt.com",
+          "description": "发现每天最新最酷的产品",
+          "tags": [
+            "产品",
+            "发现"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cloud",
+      "name": "网盘云储",
+      "icon": "cloud",
+      "sites": [
+        {
+          "name": "阿里云盘",
+          "url": "https://www.alipan.com",
+          "description": "速度快、不打扰、够安全的个人网盘",
+          "tags": [
+            "网盘",
+            "存储"
+          ]
+        },
+        {
+          "name": "百度网盘",
+          "url": "https://pan.baidu.com",
+          "description": "安全的个人云存储服务",
+          "tags": [
+            "网盘",
+            "存储"
+          ]
+        },
+        {
+          "name": "OneDrive",
+          "url": "https://onedrive.live.com",
+          "description": "微软个人云存储，与 Office 深度集成",
+          "tags": [
+            "网盘",
+            "微软"
+          ]
+        },
+        {
+          "name": "iCloud",
+          "url": "https://www.icloud.com",
+          "description": "苹果生态云服务，照片与文件自动同步",
+          "tags": [
+            "网盘",
+            "苹果"
+          ]
+        }
+      ]
+    }
+  ]
+}
