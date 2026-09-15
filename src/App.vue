@@ -46,9 +46,13 @@ let scrollListener: (() => void) | null = null
 onMounted(() => {
   scrollListener = () => {
     const y = window.scrollY
+    // 仅按滚动位置判断：滚过 Hero 搜索区后才显示顶栏搜索框，
+    // 保证它与主页搜索框互斥（Hero 搜索框此时已完全滚出视口）
     showCompactSearch.value = y > 240
     showBackTop.value = y > 360
   }
+  // 初始同步一次：页面以滚动状态打开（如刷新时保留位置）也能正确显示
+  scrollListener()
   window.addEventListener('scroll', scrollListener, { passive: true })
 })
 
@@ -60,7 +64,7 @@ onBeforeUnmount(() => {
 <template>
   <UApp>
     <div id="top" class="mx-auto flex max-w-[1200px] px-4">
-      <SideNav :categories="isSearching ? filteredCategories : categories" />
+      <SideNav variant="sidebar" :categories="isSearching ? filteredCategories : categories" />
 
       <main class="min-w-0 flex-1 pt-(--header-height) pb-10">
         <HeaderBar
@@ -82,7 +86,6 @@ onBeforeUnmount(() => {
             站内找到
             <strong class="text-base text-primary">{{ matchedCount }}</strong>
             个网站
-            <UButton size="2xs" color="neutral" variant="outline" icon="i-lucide-x" label="清除搜索" @click="clearSearch" />
           </p>
           <SearchBox
             v-model="keyword"
@@ -93,8 +96,8 @@ onBeforeUnmount(() => {
           />
         </section>
 
-        <div class="py-1 lg:hidden">
-          <SideNav :categories="isSearching ? filteredCategories : categories" />
+        <div class="py-1">
+          <SideNav variant="chips" :categories="isSearching ? filteredCategories : categories" />
         </div>
 
         <div class="flex flex-col gap-3">
@@ -120,9 +123,10 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
+        <!-- 页脚：footer / icp 均支持 HTML 片段（配置来自本仓库 JSON，非用户输入） -->
         <footer class="mt-9 border-t border-default pt-4.5 text-center text-xs text-dimmed">
-          <p>{{ siteConfig.footer }}</p>
-          <p v-if="siteConfig.icp" class="mt-1">{{ siteConfig.icp }}</p>
+          <p v-html="siteConfig.footer"></p>
+          <p v-if="siteConfig.icp" class="mt-1" v-html="siteConfig.icp"></p>
         </footer>
       </main>
 

@@ -20,14 +20,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        # v7：运行于 Node 24（Node 20 runtime 已被 GitHub 弃用）
+        uses: actions/checkout@v7
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        # 版本读取 package.json 的 packageManager 字段
+        # v6+ 才支持 pnpm v12，v4 不支持；此处 version 不锁定
+        uses: pnpm/action-setup@v6
+        with:
+          # 不锁定 pnpm 版本；如需完全可复现的构建，把 latest 改成具体版本号
+          version: latest
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        # v7：运行于 Node 24；node-version 指构建用的 Node
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
@@ -46,7 +51,8 @@ jobs:
           VITE_BASE: /${{ github.event.repository.name }}/
 
       - name: Deploy to gh-pages branch
-        uses: peaceiris/actions-gh-pages@v4
+        # 固定到 v4.1.0（更新了 Node runtime 的版本）；浮动的 @v4 不保证包含该更新
+        uses: peaceiris/actions-gh-pages@v4.1.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist

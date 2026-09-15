@@ -35,9 +35,9 @@ describe('useEngines', () => {
     expect(engines.value.some((e) => e.id === 'bing')).toBe(true)
   })
 
-  it('默认引擎为配置中的 defaultSearchEngine（bing）', () => {
+  it('默认引擎为配置中的 defaultSearchEngine（站内）', () => {
     const { currentEngine } = useEngines()
-    expect(currentEngine.value.id).toBe('bing')
+    expect(currentEngine.value.id).toBe('site')
   })
 
   it('切换引擎后写入 localStorage 持久化', async () => {
@@ -58,7 +58,7 @@ describe('useEngines', () => {
   it('localStorage 中存了不存在的引擎 id 时回退到默认引擎', () => {
     storage.set('vue-nav.engine', 'no-such-engine')
     const { currentEngine } = useEngines()
-    expect(currentEngine.value.id).toBe('bing')
+    expect(currentEngine.value.id).toBe('site')
   })
 })
 

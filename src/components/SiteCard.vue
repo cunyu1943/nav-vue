@@ -30,9 +30,28 @@ function onImgError() {
   }
 }
 
-/** 首个标签高亮展示（对应参考图中红色的分类归属标签） */
-const firstTag = computed(() => props.site.tags?.[0])
-const restTags = computed(() => props.site.tags?.slice(1) ?? [])
+/**
+ * 标签彩虹配色（按索引依次取色，超出后循环）：
+ * 红 → 橙 → 黄 → 绿 → 青 → 蓝 → 紫 → 粉
+ */
+const TAG_COLORS = [
+  'bg-red-500/12 text-red-600 dark:text-red-400',
+  'bg-orange-500/12 text-orange-600 dark:text-orange-400',
+  'bg-yellow-500/15 text-yellow-700 dark:text-yellow-400',
+  'bg-green-500/12 text-green-600 dark:text-green-400',
+  'bg-cyan-500/12 text-cyan-600 dark:text-cyan-400',
+  'bg-blue-500/12 text-blue-600 dark:text-blue-400',
+  'bg-violet-500/12 text-violet-600 dark:text-violet-400',
+  'bg-pink-500/12 text-pink-600 dark:text-pink-400',
+]
+
+/** 标签列表：每个标签按顺序分配一档彩虹色 */
+const tags = computed(() =>
+  (props.site.tags ?? []).map((name, index) => ({
+    name,
+    colorClass: TAG_COLORS[index % TAG_COLORS.length],
+  })),
+)
 </script>
 
 <template>
@@ -79,16 +98,14 @@ const restTags = computed(() => props.site.tags?.slice(1) ?? [])
       </div>
     </div>
 
-    <!-- 标签行：恒占一行高度，保证卡片等高；首个标签高亮 -->
+    <!-- 标签行：恒占一行高度，保证卡片等高；全部标签按彩虹色依次着色 -->
     <div class="flex items-center gap-1.5 overflow-hidden px-3.5 pb-3 whitespace-nowrap min-h-6">
-      <UBadge v-if="firstTag" color="error" variant="soft" size="sm">
-        {{ firstTag }}
-      </UBadge>
       <span
-        v-for="tag in restTags"
-        :key="tag"
-        class="text-xs text-dimmed"
-      >#{{ tag }}</span>
+        v-for="tag in tags"
+        :key="tag.name"
+        class="inline-flex shrink-0 items-center rounded-md px-2 py-0.5 text-xs font-medium"
+        :class="tag.colorClass"
+      >{{ tag.name }}</span>
 
       <span
         class="i-lucide-send ml-auto size-4 shrink-0 text-dimmed transition-colors group-hover:text-primary"

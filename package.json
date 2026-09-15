@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "packageManager": "pnpm@11.22.0",
   "description": "基于 Vue 3 的静态网址导航站，支持站内搜索与多搜索引擎切换，可一键部署到 GitHub Pages",
   "scripts": {
     "dev": "vite",

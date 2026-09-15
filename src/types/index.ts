@@ -6,9 +6,9 @@ export interface SiteConfig {
   subtitle: string
   /** 站点 logo，相对于 public/ 目录的路径 */
   logo: string
-  /** 页脚备案号（可选，留空不显示） */
+  /** 页脚备案号（可选，留空不显示；支持 HTML 片段） */
   icp: string
-  /** 页脚文字 */
+  /** 页脚文字（支持 HTML 片段，如 <a> 链接） */
   footer: string
   /** 默认搜索引擎 id（对应 search-engines.json 中的 id） */
   defaultSearchEngine: string

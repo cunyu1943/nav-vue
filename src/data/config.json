@@ -3,6 +3,6 @@
   "subtitle": "简洁高效的个人网址导航",
   "logo": "favicon.svg",
   "icp": "",
-  "footer": "Powered by Vue 3 · Vite · GitHub Pages",
-  "defaultSearchEngine": "bing"
+  "footer": "Powered By ©️<a href='https://github.com/cunyu1943' target='_blank'>村雨遥</a>",
+  "defaultSearchEngine": "site"
 }

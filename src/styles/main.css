@@ -79,3 +79,14 @@ body {
     background-color 0.25s ease,
     color 0.25s ease;
 }
+
+/* ===== 页脚 HTML 内容 =====
+   footer / icp 支持写入 HTML，链接沿用主题主色，避免与普通文字无差别 */
+footer a {
+  color: var(--ui-primary);
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}

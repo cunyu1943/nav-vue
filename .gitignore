@@ -11,6 +11,9 @@ node_modules
 components.d.ts
 auto-imports.d.ts
 
+# TypeScript incremental build cache
+*.tsbuildinfo
+
 # Build output
 dist
 dist-ssr

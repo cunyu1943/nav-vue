@@ -6,13 +6,14 @@
 
 ## ✨ 特性
 
-- 📌 **固定顶栏**：品牌导航栏始终固定在顶部（毛玻璃效果），滚动不消失；滚动离开搜索区后**顶栏自动淡入紧凑搜索框**，随时发起搜索
+- 📌 **固定顶栏**：品牌导航栏始终固定在顶部（毛玻璃效果），滚动不消失；滚动离开搜索区后**顶栏自动淡入紧凑搜索框**（与主页搜索框互斥，不会同时出现），随时发起搜索
 - 🌓 **明暗主题**：顶栏一键切换黑暗/明亮模式，记忆用户选择，默认跟随系统偏好，刷新无闪烁
 - 🗂️ **分类导航**：侧边栏锚点导航（移动端自动切换为横向滑动分类条），分类标题滚动吸顶
 - 📐 **规整网格**：每行固定 5 个卡片（小屏按断点降级 4/3/2/1 列）
+- 📱 **全端自适应**：320px 手机到 1920px 桌面均无横向滚动；窄屏按断点收起顶栏品牌名与副标题，优先保证搜索框与卡片的可用宽度
 - 📶 **自动折叠**：每个分类超过 3 行默认折叠，底部一键展开/收起；搜索过滤时自动全部展开
-- 🔍 **站内搜索**：输入即过滤，匹配名称 / 描述 / URL / 标签，命中关键词高亮
-- 🌐 **多引擎切换**：搜索框上方一排带图标的引擎 Tab，支持站内、必应、百度、Google、DuckDuckGo、GitHub，选择自动记忆
+- 🔍 **站内搜索**：输入即过滤，匹配名称 / 描述 / URL / 标签，命中关键词高亮；搜索框尾部为 Google 风格的圆形「清除 + 搜索」按钮（有输入才显示清除）
+- 🌐 **多引擎切换**：Hero 搜索框与顶栏紧凑搜索框**最左侧**均内置引擎下拉（图标 + 名称），支持站内、必应、百度、Google、DuckDuckGo、GitHub，默认站内搜索，两处选择实时同步且自动记忆
 - 🖼️ **灵活 Logo**：支持本地目录、在线 URL、自动 favicon 服务三级来源，加载失败自动降级为首字母头像
 - 📦 **纯静态**：构建产物为纯静态文件，无需后端；数据修改后无需改代码
 - 🚀 **自动部署**：内置 GitHub Actions 流水线，推送即自动测试 + 构建 + 发布
@@ -27,7 +28,7 @@
 | UI / 样式 | **Nuxt UI 4**（组件 + 语义色体系）+ Tailwind CSS 4 |
 | 语言 | TypeScript（strict 模式） |
 | 测试 | Vitest + happy-dom |
-| 包管理 | pnpm 11.22（`packageManager` 字段锁定） |
+| 包管理 | pnpm（不锁定版本，≥ 10 即可） |
 | 部署 | GitHub Pages + GitHub Actions |
 
 ## 🚀 快速开始
@@ -35,7 +36,7 @@
 ### 环境要求
 
 - Node.js ≥ 20（推荐 22+）
-- pnpm ≥ 10（本仓库锁定 `pnpm@12.4.1`，Corepack 用户会自动对齐版本）
+- pnpm ≥ 10（不锁定具体版本，本地装 10 / 11 / 12 都能直接使用）
 
 ### 安装与启动
 
@@ -141,9 +142,9 @@ pnpm preview
   "title": "Vue Nav",                 // 站点标题（导航栏 + Hero 区）
   "subtitle": "简洁高效的个人网址导航", // 副标题
   "logo": "favicon.svg",              // 站点 logo，相对 public/ 目录
-  "icp": "",                          // 备案号（可选，留空不显示）
-  "footer": "Powered by Vue 3 · Vite · GitHub Pages", // 页脚文字
-  "defaultSearchEngine": "bing"       // 默认搜索引擎 id
+  "icp": "",                          // 备案号（可选，留空不显示；支持 HTML）
+  "footer": "Powered by <a href=\"https://vuejs.org\" target=\"_blank\">Vue 3</a> · Vite · GitHub Pages", // 页脚文字（支持 HTML 片段，可放链接）
+  "defaultSearchEngine": "site"       // 默认搜索引擎 id（默认站内搜索）
 }
 ```
 
@@ -159,7 +160,7 @@ pnpm preview
 4. 之后每次 push 到 `main`（或在 Actions 页面手动触发 `workflow_dispatch`），流水线都会自动把最新构建推送到 gh-pages 分支并发布
 
 > - 工作流使用 [peaceiris/actions-gh-pages](https://github.com/peaceiris/actions-gh-pages) 推送分支，使用内置 `GITHUB_TOKEN`，无需额外配置密钥；`force_orphan: true` 让 gh-pages 只保留最新一次提交
-> - pnpm 版本自动读取 `package.json` 的 `packageManager` 字段，无需在 CI 中写死
+> - CI 中 pnpm 安装 **latest**（不锁定版本）；若想要完全可复现的构建，可在 workflow 里为 `pnpm/action-setup` 指定具体 `version`
 > - 首次部署时 gh-pages 分支尚不存在，**先跑一次流水线生成该分支**，再去 Settings 选择
 
 ### 关于 base 路径
@@ -192,8 +193,9 @@ vue-nav/
 │   └── .nojekyll               # 跳过 GitHub Pages 的 Jekyll 处理
 ├── src/
 │   ├── components/
-│   │   ├── HeaderBar.vue       # 顶部品牌栏
-│   │   ├── SearchBox.vue       # 搜索框 + 引擎切换 Tab
+│   │   ├── HeaderBar.vue       # 顶部品牌栏（含滚动后出现的紧凑搜索框）
+│   │   ├── SearchBox.vue       # Hero 大搜索框
+│   │   ├── EngineSelect.vue    # 搜索引擎下拉（两个搜索框共用，默认站内）
 │   │   ├── SideNav.vue         # 分类导航（桌面侧栏 / 移动端滑动条）
 │   │   ├── CategorySection.vue # 分类区块（吸顶标题 + 卡片网格）
 │   │   ├── SiteCard.vue        # 网站卡片（logo 降级 + 命中高亮）
@@ -202,13 +204,15 @@ vue-nav/
 │   │   ├── useSiteData.ts      # sites.json / config.json 数据加载
 │   │   ├── useSearch.ts        # 站内搜索过滤逻辑
 │   │   ├── useEngines.ts       # 引擎管理（选择持久化 / 跳转 URL 构建）
-│   │   └── useTheme.ts         # 明暗主题（持久化 / 系统偏好 / 应用 data-theme）
+│   │   ├── useTheme.ts         # 明暗主题（持久化 / 系统偏好 / 应用 data-theme）
+│   │   └── useColumnCount.ts   # 网格列数响应式计算（每行 5 卡 / 断点降级）
 │   ├── data/
 │   │   ├── sites.json          # ★ 网站数据配置
 │   │   ├── search-engines.json # ★ 搜索引擎配置
 │   │   └── config.json         # ★ 站点全局配置
 │   ├── utils/
 │   │   ├── logo.ts             # logo 解析与首字母头像降级
+│   │   ├── icon.ts             # 静态资源地址解析（引擎图标等 public/ 资源，适配 BASE_URL）
 │   │   └── highlight.ts        # 关键词高亮切分
 │   ├── types/index.ts          # 全部配置结构的 TS 类型定义
 │   ├── styles/main.css         # 全局样式与设计变量（CSS 变量）
@@ -275,4 +279,4 @@ favicon 服务偶发抽风时会降级为首字母头像。想彻底解决可在
 
 ## 📄 License
 
-MIT
+本项目基于 [MIT](./LICENSE) 协议开源。
