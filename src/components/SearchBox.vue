@@ -34,7 +34,7 @@ function clearKeyword() {
   <div class="mx-auto flex w-full min-w-0 max-w-[560px] flex-col items-center gap-3">
     <form
       ref="formRef"
-      class="flex w-full items-stretch rounded-full bg-elevated pr-1.5 shadow-sm ring-1 ring-default transition-shadow focus-within:ring-2 focus-within:ring-primary/40"
+      class="glass relative z-30 flex w-full items-stretch rounded-full pr-1.5 shadow-sm ring-1 ring-default transition-shadow focus-within:ring-2 focus-within:ring-primary/40"
       role="search"
       @submit.prevent="emit('search')"
     >

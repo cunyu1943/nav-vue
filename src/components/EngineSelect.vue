@@ -81,8 +81,9 @@ const triggerClass = computed(() =>
         @error="hideIcon"
       />
       <span class="whitespace-nowrap">{{ engine.name }}</span>
-      <span
-        class="i-lucide-chevron-down size-3.5 shrink-0 opacity-60 transition-transform duration-200"
+      <UIcon
+        name="i-lucide-chevron-down"
+        class="size-3.5 shrink-0 opacity-60 transition-transform duration-200"
         :class="{ 'rotate-180': open }"
         aria-hidden="true"
       />
@@ -95,7 +96,7 @@ const triggerClass = computed(() =>
     <Transition name="engine-pop">
       <ul
         v-if="open"
-        class="absolute top-[calc(100%+8px)] left-0 z-50 w-36 overflow-hidden rounded-xl border border-default bg-default p-1 shadow-lg"
+        class="absolute top-[calc(100%+8px)] left-0 z-60 w-36 overflow-hidden rounded-xl border border-default bg-default p-1 shadow-xl"
         role="listbox"
         aria-label="搜索引擎列表"
       >
@@ -120,9 +121,10 @@ const triggerClass = computed(() =>
               @error="hideIcon"
             />
             <span class="truncate">{{ e.name }}</span>
-            <span
+            <UIcon
               v-if="e.id === engine.id"
-              class="i-lucide-check ml-auto size-3.5 shrink-0"
+              name="i-lucide-check"
+              class="ml-auto size-3.5 shrink-0"
               aria-hidden="true"
             />
           </button>

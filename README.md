@@ -17,6 +17,10 @@
 - 🖼️ **灵活 Logo**：支持本地目录、在线 URL、自动 favicon 服务三级来源，加载失败自动降级为首字母头像
 - 📦 **纯静态**：构建产物为纯静态文件，无需后端；数据修改后无需改代码
 - 🚀 **自动部署**：内置 GitHub Actions 流水线，推送即自动测试 + 构建 + 发布
+- 🪟 **全站毛玻璃**：全局光斑 + 网格底图打底，顶栏 / 搜索框 / 网站卡片 / 侧边导航 / 吸顶标题统一玻璃质感；模糊半径与透明度集中在 `src/styles/main.css` 的 `--glass-*` 变量里调节
+- 🎛️ **导航栏可配置**：顶栏显示项（logo / 标题 / 副标题 / 紧凑搜索框 / 主题按钮）、高度、是否固定、自定义链接与**二级下拉菜单**全部由 `config.json` 的 `nav` 段驱动，菜单紧跟在站点 logo 之后靠左排列
+- 🔠 **悬停小动效**：鼠标移到卡片上时，名称与描述若超出一行被截断即左右往返滚动（未超出不滚动），同时 logo 转动一圈；两处动效均遵循系统「减少动态效果」偏好
+- 🎨 **图标三选一**：导航链接图标支持 Iconify 图标名、iconfont 字体图标（可自托管、离线可用）与图片，换图标只改 JSON
 - ✅ **质量保障**：vitest 单元测试覆盖搜索、引擎与主题核心逻辑
 
 ## 🛠️ 技术栈
@@ -148,6 +152,61 @@ pnpm preview
 }
 ```
 
+### 6. 导航栏（顶栏）自定义 —— `config.json` 的 `nav` 字段
+
+顶栏的展示内容、尺寸与行为都由 `nav` 配置驱动，**改 JSON 即改导航栏，无需改组件代码**；所有字段均可省略，省略即用默认值。
+
+```jsonc
+{
+  "nav": {
+    "sticky": true,           // 顶栏是否固定顶部；false 则随页面滚动
+    "height": 56,             // 顶栏高度（px），同步决定内容区让位与锚点滚动留白
+    "iconfontUrl": "",        // iconfont 样式表地址（可选）：CDN 或 public/ 相对路径
+    "showLogo": true,         // 站点 logo
+    "showTitle": true,        // 站点标题
+    "showSubtitle": true,     // 副标题（≥1100px 才显示）
+    "showSearch": true,       // 滚动后淡入的顶栏紧凑搜索框
+    "showThemeToggle": true,  // 明暗主题切换按钮
+    "showSideNav": true,      // 分类导航（桌面侧栏 + 移动端横滑分类条）
+    "links": [                // 自定义导航链接（<640px 窄屏自动隐藏）
+      {
+        "name": "GitHub",                   // 展示名称
+        "url": "https://github.com/vuejs",  // 跳转地址
+        "icon": "i-lucide-github",          // 图标：Iconify 图标名 / 字体图标类名 / 图片
+        "external": true                    // 是否新标签页打开，默认 true
+      },
+      {
+        "name": "常用推荐",                 // 配置了 children 即变为下拉菜单
+        "url": "",                          // 父级菜单项 url 留空即可（点击只展开/收起）
+        "icon": "i-lucide-star",
+        "children": [                       // 子项结构与一级项完全一致（只支持二级）
+          {
+            "name": "Vue.js 官方文档",
+            "url": "https://cn.vuejs.org",
+            "icon": "i-lucide-book-open"
+          },
+          {
+            "name": "Vite",
+            "url": "https://cn.vite.dev",
+            "icon": "i-lucide-zap"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+- **图标写法**（三选一）：
+  1. **Iconify 图标名**：`"i-lucide-github"`（图标名查 [Lucide](https://lucide.dev/icons/) 等图标集即写即用）。图标由 `vite.config.ts` 中 `icon.clientBundle.scan` 从源码与 JSON 里扫描并打包进本地数据，**离线可用**，不请求在线接口
+  2. **iconfont 字体图标**：先在 `iconfontUrl` 填入 iconfont.cn 生成的样式表地址，再写 `"icon": "iconfont icon-github"`。这是最灵活的方式——自建图标全部可用，样式表既能用 CDN（`//at.alicdn.com/t/c/font_xxx.css`），也能把 `iconfont.css` 与字体文件放进 `public/iconfont/` 后写相对路径 `iconfont/iconfont.css`（自托管、无外网依赖）
+  3. **图片**：`"logos/vue.svg"`（相对 `public/`）或完整 URL，加载失败自动隐藏、只留文字
+- **默认值**：不写 `nav` 段时，上述开关均为 `true`、`height` 为 `56`、`links` 为空数组；默认值集中定义在 `src/composables/useSiteData.ts` 的 `DEFAULT_NAV`
+- **二级下拉菜单**：给链接加 `children` 数组即变为下拉菜单（鼠标悬停或点击展开，Esc / 点击面板外收起）；子项超过 6 个时面板自动分列（每列最多 6 项、最多 3 列，纵向填充）
+- **菜单位置**：自定义导航紧跟在 logo / 标题之后靠左排列，不会被推到顶栏中间
+- **顶栏高度**：`height` 以 `--header-height` 变量下发全站，侧栏粘性偏移、内容区让位、分类锚点滚动留白都会自动跟随；`sticky` 为 `false` 时该变量自动归零
+- **毛玻璃强度**：想调节玻璃的通透感，改 `src/styles/main.css` 中 `--glass-blur` / `--glass-saturate` / `--glass-alpha-*` 即可，全站玻璃元素一起生效；背景光斑与网格由 `--glass-glow-a/b/c`、`--glass-grid` 控制（明暗主题各一套）
+
 ## 📦 部署到 GitHub Pages
 
 ### 方式一：GitHub Actions 自动部署到 gh-pages 分支（推荐）
@@ -242,11 +301,14 @@ vue-nav/
 | 九 | 顶栏紧凑搜索框 + 引擎图标 | `pnpm test`（4 个资源解析用例）+ 构建 + 图标产物核对 |
 | 十 | 每行 5 卡 + 超 3 行折叠 | `pnpm test`（10 个断点用例）+ 构建 + 网格样式产物核对 |
 | 十一 | 迁移 Nuxt UI 4 + 卡片样式重设计 | `pnpm test` 全绿 + vite/vue-tsc 构建通过 + preview 抽查 |
+| 十二 | 全站毛玻璃 + 顶栏自定义配置 | `pnpm test`（47 个用例）+ vite/vue-tsc 构建通过 + CSS 产物核对 |
+| 十三 | 顶栏导航链接示例 + 卡片文本悬停滚动 | `pnpm test` + vite/vue-tsc 构建通过 + 产物核对 |
+| 十四 | 图标改为 UIcon 运行时渲染 + iconfont 支持 | `pnpm test`（49 个用例）+ 构建通过 + 图标数据产物核对 |
 
 **提交前固定四连**（也是 CI 流水线执行的检查）：
 
 ```bash
-pnpm test        # 单元测试（44 个用例：搜索过滤 / 高亮切分 / 引擎管理 / URL 构建 / 主题切换 / 资源解析 / 网格断点）
+pnpm test        # 单元测试（47 个用例：搜索过滤 / 高亮切分 / 引擎管理 / URL 构建 / 主题切换 / 资源解析 / 图标类名 / 网格断点）
 pnpm typecheck   # TypeScript 类型检查
 pnpm build       # 生产构建（先 vite build 生成 Nuxt UI 类型声明，再 vue-tsc 类型检查）
 pnpm preview     # 本地预览产物抽查
@@ -276,6 +338,14 @@ favicon 服务偶发抽风时会降级为首字母头像。想彻底解决可在
 
 **Q：站内搜索支持哪些字段？**
 名称、描述、URL、标签，全部大小写不敏感。
+
+**Q：为什么图标要用 `<UIcon>`，而不能写 `class="i-lucide-xxx"`？**
+`@nuxt/ui` 在 Vue 项目里通过 `@iconify/vue` 在**运行时**解析图标名，不会为 `i-*` 生成 CSS 类，所以 `class="i-lucide-xxx"` 不会显示任何东西。请统一用 `<UIcon name="i-lucide-xxx" />` 或组件的 `icon` 属性；写在 JSON 配置里的图标名由 `vite.config.ts` 的 `icon.clientBundle.scan` 扫描进本地图标数据，因此配置文件里的图标同样生效。若要使用自建图标，用上面的 iconfont 方式最省事。
+
+**Q：`i-lucide-book-open` 是什么意思？为什么在 iconfont 上搜不到？**
+它是 [Iconify](https://iconify.design/) 的图标名，格式为 `i-<图标集>-<图标名>`：`i-` 是前缀、`lucide` 是[图标集](https://lucide.dev/icons/)名（内置 1900+ 矢量图标）、`book-open` 是该集合里的图标名。找图标直接去 Lucide 官网搜索，页面上标的 `book-open` 对应配置里写 `i-lucide-book-open`。
+Iconify 与 [iconfont](https://www.iconfont.cn/) 是两套彼此独立的体系（前者是聚合 200+ 图标集的 SVG 数据，后者是阿里的字体图标库），名字不通用，所以在 iconfont 上搜不到 Lucide 的名字。本项目用到的图标由 `@iconify-json/lucide` 在本地提供，离线可用。
+想改用其它图标集：`pnpm add -D @iconify-json/tabler` 装上集合后即可写 `i-tabler-book`（集合名就是包名去掉 `@iconify-json/` 的部分）；跨集合搜索图标名可用 [Iconify 图标搜索](https://icon-sets.iconify.design/)。
 
 ## 📄 License
 

@@ -3,7 +3,8 @@ import { computed, ref } from 'vue'
 
 
 import EngineSelect from '@/components/EngineSelect.vue'
-import { siteConfig } from '@/composables/useSiteData'
+import NavMenu from '@/components/NavMenu.vue'
+import { navConfig, siteConfig } from '@/composables/useSiteData'
 import { useTheme } from '@/composables/useTheme'
 import type { SearchEngine } from '@/types'
 
@@ -16,16 +17,29 @@ const toggleLabel = computed(() =>
   theme.value === 'dark' ? '切换到明亮模式' : '切换到暗色模式',
 )
 
+/** 品牌区是否展示（logo / 标题 / 副标题全部关闭时整体隐藏） */
+const showBrand = computed(
+  () => navConfig.showLogo || navConfig.showTitle || navConfig.showSubtitle,
+)
+
+/** 自定义导航链接（为空时 NavMenu 自身不渲染） */
+const navLinks = computed(() => navConfig.links)
+
 /** 顶栏紧凑搜索框：与 Hero 大搜索框共享关键词 / 引擎状态 */
 const keyword = defineModel<string>('keyword', { required: true })
 const engine = defineModel<SearchEngine>('engine', { required: true })
 
-defineProps<{
-  /** 可选引擎列表 */
-  engines: SearchEngine[]
-  /** 是否显示紧凑搜索框（滚动离开 Hero 搜索区后为 true） */
-  showSearch: boolean
-}>()
+withDefaults(
+  defineProps<{
+    /** 可选引擎列表 */
+    engines: SearchEngine[]
+    /** 是否显示紧凑搜索框（滚动离开 Hero 搜索区后为 true） */
+    showSearch: boolean
+    /** 顶栏是否固定（false 时随页面滚动，紧凑搜索框不会出现） */
+    sticky?: boolean
+  }>(),
+  { sticky: true },
+)
 
 const emit = defineEmits<{
   search: []
@@ -61,30 +75,54 @@ function clearKeyword() {
 </script>
 
 <template>
-  <!-- 固定顶栏：滚动时保持可见 -->
-  <header class="fixed inset-x-0 top-0 z-50 border-b border-default bg-default/80 backdrop-blur-md">
-    <div class="mx-auto flex h-(--header-height) max-w-[1200px] items-center justify-between gap-3 px-4">
-      <a
-        class="flex min-w-0 shrink-0 items-center gap-2.5 transition-opacity hover:opacity-80"
-        href="#top"
-        title="返回首页"
-        aria-label="返回首页"
-        @click="goHome"
-      >
-        <img :src="logoSrc" :alt="siteConfig.title" class="size-7.5 rounded-lg" />
-        <!-- 窄屏只留 logo：品牌名 ≥640 出现、副标题 ≥1100 出现，宽度优先让给搜索框 -->
-        <span class="hidden text-[17px] font-bold whitespace-nowrap text-highlighted md:inline">{{ siteConfig.title }}</span>
-        <span class="hidden overflow-hidden border-l border-default pl-3 text-xs whitespace-nowrap text-muted text-ellipsis xl:block">
-          {{ siteConfig.subtitle }}
-        </span>
-      </a>
+  <!-- 顶栏：毛玻璃质感；sticky 为 false 时随页面滚动 -->
+  <header
+    class="glass-strong border-b border-default"
+    :class="sticky ? 'fixed inset-x-0 top-0 z-50' : 'relative z-40'"
+  >
+    <div
+      class="mx-auto flex max-w-[1200px] items-center justify-between gap-3 px-4"
+      :style="{ height: `${navConfig.height}px` }"
+    >
+      <!-- 左侧整体靠左：品牌区与自定义导航紧挨，菜单从 logo 后开始 -->
+      <div class="flex min-w-0 items-center gap-2 md:gap-3">
+        <a
+          v-if="showBrand"
+          class="flex min-w-0 shrink-0 items-center gap-2.5 transition-opacity hover:opacity-80"
+          href="#top"
+          title="返回首页"
+          aria-label="返回首页"
+          @click="goHome"
+        >
+          <img
+            v-if="navConfig.showLogo"
+            :src="logoSrc"
+            :alt="siteConfig.title"
+            class="size-7.5 rounded-lg"
+          />
+          <!-- 窄屏只留 logo：品牌名 ≥640 出现、副标题 ≥1100 出现，宽度优先让给搜索框 -->
+          <span
+            v-if="navConfig.showTitle"
+            class="hidden text-[17px] font-bold whitespace-nowrap text-highlighted md:inline"
+          >{{ siteConfig.title }}</span>
+          <span
+            v-if="navConfig.showSubtitle"
+            class="hidden overflow-hidden border-l border-default pl-3 text-xs whitespace-nowrap text-muted text-ellipsis xl:block"
+          >
+            {{ siteConfig.subtitle }}
+          </span>
+        </a>
+
+        <!-- 自定义导航链接：支持二级下拉，配置来自 config.json 的 nav.links -->
+        <NavMenu :links="navLinks" />
+      </div>
 
       <!-- 紧凑搜索框：离开 Hero 搜索区后淡入，随时发起搜索 -->
       <Transition name="compact">
         <form
-          v-if="showSearch"
+          v-if="showSearch && navConfig.showSearch"
           ref="formRef"
-          class="mx-1.5 flex h-8.5 min-w-0 flex-1 items-center rounded-full bg-elevated pr-1 ring-1 ring-default transition-shadow focus-within:ring-2 focus-within:ring-primary/40 sm:mx-3"
+          class="glass mx-1.5 flex h-8.5 min-w-0 flex-1 items-center rounded-full pr-1 ring-1 ring-default transition-shadow focus-within:ring-2 focus-within:ring-primary/40 sm:mx-3"
           role="search"
           @submit.prevent="submit"
         >
@@ -130,6 +168,7 @@ function clearKeyword() {
       </Transition>
 
       <UButton
+        v-if="navConfig.showThemeToggle"
         class="shrink-0"
         color="neutral"
         variant="ghost"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 
 import BackTop from '@/components/BackTop.vue'
@@ -7,7 +7,7 @@ import CategorySection from '@/components/CategorySection.vue'
 import HeaderBar from '@/components/HeaderBar.vue'
 import SearchBox from '@/components/SearchBox.vue'
 import SideNav from '@/components/SideNav.vue'
-import { siteConfig, useSiteData } from '@/composables/useSiteData'
+import { navConfig, siteConfig, useSiteData } from '@/composables/useSiteData'
 import { useEngines } from '@/composables/useEngines'
 import { useSearch } from '@/composables/useSearch'
 
@@ -36,7 +36,15 @@ function clearSearch() {
   keyword.value = ''
 }
 
-/** 顶栏紧凑搜索框显隐：滚动离开 Hero 搜索区后显示 */
+/**
+ * 顶栏高度以 CSS 变量下发给全站（侧栏粘性偏移 / 内容区让位 / 锚点滚动留白）：
+ * 非固定顶栏时不占位，取 0 让内容自然贴顶
+ */
+const rootStyle = computed<Record<string, string>>(() => ({
+  '--header-height': navConfig.sticky ? `${navConfig.height}px` : '0px',
+}))
+
+/** 顶栏紧凑搜索框显隐：滚动离开 Hero 搜索区后显示（顶栏非固定时无意义，恒不显示） */
 const showCompactSearch = ref(false)
 
 /** 回到顶部按钮显示状态 */
@@ -48,7 +56,7 @@ onMounted(() => {
     const y = window.scrollY
     // 仅按滚动位置判断：滚过 Hero 搜索区后才显示顶栏搜索框，
     // 保证它与主页搜索框互斥（Hero 搜索框此时已完全滚出视口）
-    showCompactSearch.value = y > 240
+    showCompactSearch.value = navConfig.sticky && navConfig.showSearch && y > 240
     showBackTop.value = y > 360
   }
   // 初始同步一次：页面以滚动状态打开（如刷新时保留位置）也能正确显示
@@ -63,15 +71,26 @@ onBeforeUnmount(() => {
 
 <template>
   <UApp>
-    <div id="top" class="mx-auto flex max-w-[1200px] px-4">
-      <SideNav variant="sidebar" :categories="isSearching ? filteredCategories : categories" />
+    <!-- 全站毛玻璃底图：光斑 + 网格，作为各玻璃元素的模糊对象 -->
+    <div class="app-backdrop" aria-hidden="true" />
 
-      <main class="min-w-0 flex-1 pt-(--header-height) pb-10">
+    <div id="top" class="relative z-[1] mx-auto flex max-w-[1200px] px-4" :style="rootStyle">
+      <SideNav
+        v-if="navConfig.showSideNav"
+        variant="sidebar"
+        :categories="isSearching ? filteredCategories : categories"
+      />
+
+      <main
+        class="min-w-0 flex-1 pb-10"
+        :class="navConfig.sticky ? 'pt-(--header-height)' : ''"
+      >
         <HeaderBar
           v-model:keyword="keyword"
           v-model:engine="currentEngine"
           :engines="engines"
           :show-search="showCompactSearch"
+          :sticky="navConfig.sticky"
           @search="onSearch"
         />
 
@@ -96,8 +115,11 @@ onBeforeUnmount(() => {
           />
         </section>
 
-        <div class="py-1">
-          <SideNav variant="chips" :categories="isSearching ? filteredCategories : categories" />
+        <div v-if="navConfig.showSideNav" class="py-1">
+          <SideNav
+            variant="chips"
+            :categories="isSearching ? filteredCategories : categories"
+          />
         </div>
 
         <div class="flex flex-col gap-3">

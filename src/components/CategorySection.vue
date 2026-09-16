@@ -62,7 +62,7 @@ function toggle() {
 <template>
   <section :id="category.id" class="scroll-mt-[calc(var(--header-height)+8px)] pt-4">
     <!-- 标题行：左侧图标+标题+数量，右侧醒目的展开/收起按钮（折叠时提示更明显） -->
-    <header class="sticky top-(--header-height) z-5 mb-3.5 flex items-center justify-between gap-3 rounded-lg bg-default/85 px-1 py-2.5 backdrop-blur-sm">
+    <header class="glass-strong sticky top-(--header-height) z-5 mb-3.5 flex items-center justify-between gap-3 rounded-lg px-1 py-2.5">
       <h2 class="flex items-center gap-2 text-[17px] font-bold text-highlighted">
         <span class="text-lg">{{ iconOf(category.icon) }}</span>
         {{ category.name }}

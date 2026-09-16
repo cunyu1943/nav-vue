@@ -2,8 +2,8 @@
 import { computed, ref, watch } from 'vue'
 
 
+import MarqueeText from '@/components/MarqueeText.vue'
 import type { SiteItem } from '@/types'
-import { splitHighlight } from '@/utils/highlight'
 import { letterAvatar, resolveLogo } from '@/utils/logo'
 
 const props = defineProps<{
@@ -11,6 +11,9 @@ const props = defineProps<{
   /** 搜索关键词（用于命中高亮，可选） */
   keyword?: string
 }>()
+
+/** 鼠标是否悬停在卡片上（用于触发名称 / 描述滚动） */
+const hovered = ref(false)
 
 /** 当前展示的图片 src（logo 加载失败时降级为字母头像） */
 const imgSrc = ref('')
@@ -57,44 +60,41 @@ const tags = computed(() =>
 <template>
   <!-- 布局参考一为导航：圆形 logo 左侧 + 名称/单行描述 + 底部标签行 + 右下直达箭头 -->
   <a
-    class="group relative flex flex-col rounded-lg bg-elevated ring-1 ring-default transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:ring-primary"
+    class="glass group relative flex flex-col rounded-lg ring-1 ring-default transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:ring-primary"
     :href="site.url"
     target="_blank"
     rel="noopener noreferrer"
     :title="`${site.name} — ${site.url}`"
+    @mouseenter="hovered = true"
+    @mouseleave="hovered = false"
   >
     <div class="flex flex-1 items-center gap-3 p-3.5 pb-2.5">
       <img
         v-if="imgSrc"
-        class="size-14 shrink-0 rounded-full bg-muted object-cover"
+        class="site-logo size-14 shrink-0 rounded-full bg-muted object-cover"
         :src="imgSrc"
         :alt="site.name"
         loading="lazy"
         @error="onImgError"
       />
-      <span v-else class="flex size-14 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-semibold text-inverted">
+      <span v-else class="site-logo flex size-14 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-semibold text-inverted">
         {{ site.name.charAt(0) }}
       </span>
 
       <div class="min-w-0 flex-1">
-        <div class="truncate text-[15px] font-semibold text-highlighted">
-          <template
-            v-for="(seg, i) in splitHighlight(site.name, keyword ?? '')"
-            :key="i"
-          >
-            <mark v-if="seg.hit" class="rounded-sm bg-primary/15 px-0.5 text-primary">{{ seg.text }}</mark>
-            <template v-else>{{ seg.text }}</template>
-          </template>
-        </div>
-        <p class="mt-0.5 truncate text-sm text-muted">
-          <template
-            v-for="(seg, i) in splitHighlight(site.description, keyword ?? '')"
-            :key="i"
-          >
-            <mark v-if="seg.hit" class="rounded-sm bg-primary/15 px-0.5 text-primary">{{ seg.text }}</mark>
-            <template v-else>{{ seg.text }}</template>
-          </template>
-        </p>
+        <!-- 名称与描述超出一行时，鼠标悬停在卡片上即可左右滚动查看全文 -->
+        <MarqueeText
+          class="text-base font-semibold text-highlighted"
+          :text="site.name"
+          :keyword="keyword"
+          :active="hovered"
+        />
+        <MarqueeText
+          class="mt-0.5 text-[13px] text-muted"
+          :text="site.description"
+          :keyword="keyword"
+          :active="hovered"
+        />
       </div>
     </div>
 
@@ -107,10 +107,35 @@ const tags = computed(() =>
         :class="tag.colorClass"
       >{{ tag.name }}</span>
 
-      <span
-        class="i-lucide-send ml-auto size-4 shrink-0 text-dimmed transition-colors group-hover:text-primary"
+      <UIcon
+        name="i-lucide-send"
+        class="ml-auto size-4 shrink-0 text-dimmed transition-colors group-hover:text-primary"
         aria-hidden="true"
       />
     </div>
   </a>
 </template>
+
+<style scoped>
+/* 鼠标移到卡片上时，logo 转动一圈（hover 持续期间只转一次，移开再进入会重新转） */
+.group:hover .site-logo {
+  animation: logo-spin 0.65s cubic-bezier(0.34, 1.16, 0.64, 1);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 尊重系统的「减少动态效果」偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .site-logo {
+    animation: none;
+  }
+}
+</style>

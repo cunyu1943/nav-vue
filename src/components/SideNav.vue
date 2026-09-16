@@ -38,7 +38,7 @@ function iconOf(id?: string): string {
     class="sticky top-(--header-height) hidden h-[calc(100vh-var(--header-height))] w-44 shrink-0 self-start overflow-y-auto py-6 lg:block"
     aria-label="分类导航"
   >
-    <ul class="flex flex-col gap-0.5">
+    <ul class="glass-panel flex flex-col gap-0.5 rounded-xl p-1.5">
       <li v-for="c in categories" :key="c.id">
         <a
           class="flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm text-default transition-colors hover:bg-primary/10 hover:text-primary"
@@ -57,7 +57,7 @@ function iconOf(id?: string): string {
     <a
       v-for="c in categories"
       :key="c.id"
-      class="shrink-0 rounded-full bg-elevated px-3.5 py-1.5 text-xs text-default ring-1 ring-default transition-colors hover:text-primary hover:ring-primary"
+      class="glass shrink-0 rounded-full px-3.5 py-1.5 text-xs text-default ring-1 ring-default transition-colors hover:text-primary hover:ring-primary"
       :href="`#${c.id}`"
     >
       {{ iconOf(c.icon) }} {{ c.name }}

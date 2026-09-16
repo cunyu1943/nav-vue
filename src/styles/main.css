@@ -12,8 +12,26 @@
 }
 
 :root {
-  /* 固定顶栏高度（供吸顶偏移等使用） */
+  /* 固定顶栏高度：运行时会由 config.json 的 nav.height 覆盖，
+     此处为脚本执行前的兜底值 */
   --header-height: 56px;
+
+  /* ===== 毛玻璃（全站玻璃质感的统一调节入口） ===== */
+  /* 模糊半径 */
+  --glass-blur: 14px;
+  --glass-blur-strong: 20px;
+  /* 饱和度增强：让透过玻璃的颜色更通透 */
+  --glass-saturate: 170%;
+  /* 各层级玻璃的不透明度 */
+  --glass-alpha-elevated: 72%; /* 卡片 / 搜索框（elevated 底色） */
+  --glass-alpha-panel: 76%; /* 侧栏等面板（页面底色） */
+  --glass-alpha-strong: 86%; /* 顶栏 / 吸顶标题（需更好遮挡滚动内容） */
+
+  /* 背景光斑与网格：毛玻璃的“被模糊对象”，明暗各一套 */
+  --glass-glow-a: rgba(76, 110, 245, 0.18);
+  --glass-glow-b: rgba(139, 92, 246, 0.15);
+  --glass-glow-c: rgba(34, 211, 238, 0.12);
+  --glass-grid: rgba(24, 28, 36, 0.045);
 }
 
 /* ===== Nuxt UI 语义色映射 =====
@@ -57,6 +75,12 @@
   --ui-text-dimmed: #7d838c;
   --ui-text-highlighted: #f5f7fa;
   --ui-text-inverted: #161616;
+
+  /* 暗色下光斑更亮、网格更淡，避免玻璃显得脏 */
+  --glass-glow-a: rgba(106, 141, 255, 0.24);
+  --glass-glow-b: rgba(154, 108, 255, 0.18);
+  --glass-glow-c: rgba(34, 211, 238, 0.1);
+  --glass-grid: rgba(255, 255, 255, 0.035);
 }
 
 html {
@@ -78,6 +102,75 @@ body {
   transition:
     background-color 0.25s ease,
     color 0.25s ease;
+}
+
+/* ===== 全站背景层 =====
+   固定在视口的光斑 + 网格，为所有毛玻璃元素提供“被模糊对象”。
+   放在页面内容之下（z-index: 0），内容容器以 z-1 覆盖其上 */
+.app-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(48rem 34rem at 8% -12%, var(--glass-glow-a), transparent 62%),
+    radial-gradient(42rem 30rem at 98% 4%, var(--glass-glow-b), transparent 64%),
+    radial-gradient(46rem 34rem at 50% 112%, var(--glass-glow-c), transparent 66%);
+}
+
+/* 细网格：让模糊效果有可辨识的纹理细节 */
+.app-backdrop::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background-image:
+    linear-gradient(to right, var(--glass-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--glass-grid) 1px, transparent 1px);
+  background-size: 46px 46px;
+  -webkit-mask-image: radial-gradient(130% 100% at 50% 0%, #000 30%, transparent 88%);
+  mask-image: radial-gradient(130% 100% at 50% 0%, #000 30%, transparent 88%);
+}
+
+/* ===== 毛玻璃工具类 =====
+   glass        卡片 / 搜索框（elevated 底色）
+   glass-panel  侧栏等半透明面板（页面底色）
+   glass-strong 顶栏 / 吸顶标题（需更好遮挡其后的滚动内容）
+   强度统一由 :root 的 --glass-* 变量调节 */
+@utility glass {
+  background-color: color-mix(
+    in oklab,
+    var(--ui-bg-elevated) var(--glass-alpha-elevated),
+    transparent
+  );
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+}
+
+@utility glass-panel {
+  background-color: color-mix(in oklab, var(--ui-bg) var(--glass-alpha-panel), transparent);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+}
+
+@utility glass-strong {
+  background-color: color-mix(in oklab, var(--ui-bg) var(--glass-alpha-strong), transparent);
+  -webkit-backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
+}
+
+/* 不支持 backdrop-filter 的浏览器：回退为不透明底色，保证可读性 */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass,
+  .glass-panel,
+  .glass-strong {
+    background-color: var(--ui-bg-elevated);
+  }
+
+  .glass-panel,
+  .glass-strong {
+    background-color: var(--ui-bg);
+  }
 }
 
 /* ===== 页脚 HTML 内容 =====

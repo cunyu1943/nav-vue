@@ -4,5 +4,77 @@
   "logo": "favicon.svg",
   "icp": "",
   "footer": "Powered By ©️<a href='https://github.com/cunyu1943' target='_blank'>村雨遥</a>",
-  "defaultSearchEngine": "site"
+  "defaultSearchEngine": "site",
+  "nav": {
+    "sticky": true,
+    "height": 56,
+    "iconfontUrl": "//at.alicdn.com/t/c/font_3871871_6ceb0cci0x9.css",
+    "showLogo": true,
+    "showTitle": true,
+    "showSubtitle": true,
+    "showSearch": true,
+    "showThemeToggle": true,
+    "showSideNav": true,
+    "links": [
+      {
+        "name": "知乎",
+        "url": "https://cunyu1943.github.io",
+        "icon": "iconfont icon-zhihu",
+        "external": true
+      },
+      {
+        "name": "JavaPark",
+        "url": "https://cunyu1943.github.io",
+        "icon": "i-lucide-globe",
+        "external": true
+      },
+      {
+        "name": "常用推荐",
+        "url": "",
+        "icon": "i-lucide-star",
+        "children": [
+          {
+            "name": "GitHub",
+            "url": "https://github.com",
+            "icon": "i-lucide-github"
+          },
+          {
+            "name": "Vue.js 官方文档",
+            "url": "https://cn.vuejs.org",
+            "icon": "i-lucide-book-open"
+          },
+          {
+            "name": "Vite",
+            "url": "https://cn.vite.dev",
+            "icon": "i-lucide-zap"
+          },
+          {
+            "name": "MDN",
+            "url": "https://developer.mozilla.org/zh-CN/",
+            "icon": "i-lucide-file-text"
+          },
+          {
+            "name": "Stack Overflow",
+            "url": "https://stackoverflow.com",
+            "icon": "i-lucide-message-circle"
+          },
+          {
+            "name": "掘金",
+            "url": "https://juejin.cn",
+            "icon": "i-lucide-gem"
+          },
+          {
+            "name": "CSDN",
+            "url": "https://www.csdn.net",
+            "icon": "i-lucide-code"
+          },
+          {
+            "name": "知乎",
+            "url": "https://www.zhihu.com",
+            "icon": "i-lucide-help-circle"
+          }
+        ]
+      }
+    ]
+  }
 }
