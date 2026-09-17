@@ -52,6 +52,11 @@ export interface NavConfig {
   showThemeToggle?: boolean
   /** 是否显示分类导航（桌面侧栏 + 移动端横滑分类条），默认 true */
   showSideNav?: boolean
+  /**
+   * 项目 GitHub 地址（可选）：配置后在主题切换按钮左侧显示 GitHub 图标，
+   * 留空或省略则整个图标不显示
+   */
+  github?: string
   /** 自定义导航链接，默认空数组；窄屏（<640px）自动隐藏 */
   links?: NavLink[]
 }

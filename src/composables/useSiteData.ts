@@ -21,6 +21,7 @@ const DEFAULT_NAV: Required<NavConfig> = {
   showSearch: true,
   showThemeToggle: true,
   showSideNav: true,
+  github: '',
   links: [],
 }
 
@@ -49,6 +50,7 @@ export const navConfig: Required<NavConfig> = {
   showSearch: pick(rawNav.showSearch, DEFAULT_NAV.showSearch),
   showThemeToggle: pick(rawNav.showThemeToggle, DEFAULT_NAV.showThemeToggle),
   showSideNav: pick(rawNav.showSideNav, DEFAULT_NAV.showSideNav),
+  github: rawNav.github?.trim() ?? '',
   links: Array.isArray(rawNav.links) ? rawNav.links : [],
 }
 

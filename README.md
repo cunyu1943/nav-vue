@@ -14,6 +14,7 @@
 - 📶 **自动折叠**：每个分类超过 3 行默认折叠，底部一键展开/收起；搜索过滤时自动全部展开
 - 🔍 **站内搜索**：输入即过滤，匹配名称 / 描述 / URL / 标签，命中关键词高亮；搜索框尾部为 Google 风格的圆形「清除 + 搜索」按钮（有输入才显示清除）
 - 🌐 **多引擎切换**：Hero 搜索框与顶栏紧凑搜索框**最左侧**均内置引擎下拉（图标 + 名称），支持站内、必应、百度、Google、DuckDuckGo、GitHub，默认站内搜索，两处选择实时同步且自动记忆
+- 🛡️ **跳转确认**：点击网站卡片先弹窗提示「即将前往【网址】，此链接与本网站无关，请自行判断」，点「继续访问」才在新标签页打开，点「取消跳转」/ Esc / 点遮罩即关闭，避免误点离开本站
 - 🖼️ **灵活 Logo**：支持本地目录、在线 URL、自动 favicon 服务三级来源，加载失败自动降级为首字母头像
 - 📦 **纯静态**：构建产物为纯静态文件，无需后端；数据修改后无需改代码
 - 🚀 **自动部署**：内置 GitHub Actions 流水线，推送即自动测试 + 构建 + 发布
@@ -136,8 +137,10 @@ pnpm preview
 
 - 顶栏右侧 🌙/☀️ 按钮一键切换，选择保存在 `localStorage`（key：`vue-nav.theme`）
 - 首次访问自动跟随系统偏好（`prefers-color-scheme`）
-- 主题通过 `<html data-theme>` 驱动 CSS 变量；`index.html` 内有防闪烁脚本，刷新不会出现白屏闪变
-- 想调整暗色配色，改 `src/styles/main.css` 中 `[data-theme='dark']` 的变量即可
+- 主题通过 `<html class="dark">` 驱动 CSS 变量；`index.html` 内有防闪烁脚本，刷新不会出现白屏闪变
+- **主色**：`main.css` 里的 `--ui-primary`（明亮 `#4fc08d` / 暗色 `#5fd3a0`，即 Vue 官方品牌绿）。按钮、链接、导航激活态、卡片悬停描边、输入框聚焦环等语义色全部由它派生，**改这一处即可全站换色**
+- **背景光斑**：`--glass-glow-a/b/c` 是与主色同色系的三档（绿 / 青绿 / 薄荷）。换主色时建议一并调整，否则整页色调会不统一
+- 想调整暗色配色，改 `src/styles/main.css` 中 `.dark` 内的变量即可
 
 ### 5. 站点全局配置 — `src/data/config.json`
 
@@ -168,6 +171,7 @@ pnpm preview
     "showSearch": true,       // 滚动后淡入的顶栏紧凑搜索框
     "showThemeToggle": true,  // 明暗主题切换按钮
     "showSideNav": true,      // 分类导航（桌面侧栏 + 移动端横滑分类条）
+    "github": "",             // 项目 GitHub 地址（可选）：填写后主题按钮旁出现 GitHub 图标，留空隐藏
     "links": [                // 自定义导航链接（<640px 窄屏自动隐藏）
       {
         "name": "GitHub",                   // 展示名称
@@ -204,6 +208,7 @@ pnpm preview
 - **默认值**：不写 `nav` 段时，上述开关均为 `true`、`height` 为 `56`、`links` 为空数组；默认值集中定义在 `src/composables/useSiteData.ts` 的 `DEFAULT_NAV`
 - **二级下拉菜单**：给链接加 `children` 数组即变为下拉菜单（鼠标悬停或点击展开，Esc / 点击面板外收起）；子项超过 6 个时面板自动分列（每列最多 6 项、最多 3 列，纵向填充）
 - **菜单位置**：自定义导航紧跟在 logo / 标题之后靠左排列，不会被推到顶栏中间
+- **GitHub 入口**：`github` 填地址后，主题切换按钮左侧出现 GitHub 图标（新标签页打开，带 `rel="noopener noreferrer"`）；留空或不写即完全隐藏。它与主题按钮同处右侧按钮组，`<360px` 的极窄屏自动隐藏，把宽度让给搜索框
 - **顶栏高度**：`height` 以 `--header-height` 变量下发全站，侧栏粘性偏移、内容区让位、分类锚点滚动留白都会自动跟随；`sticky` 为 `false` 时该变量自动归零
 - **毛玻璃强度**：想调节玻璃的通透感，改 `src/styles/main.css` 中 `--glass-blur` / `--glass-saturate` / `--glass-alpha-*` 即可，全站玻璃元素一起生效；背景光斑与网格由 `--glass-glow-a/b/c`、`--glass-grid` 控制（明暗主题各一套）
 
@@ -255,6 +260,7 @@ vue-nav/
 │   │   ├── HeaderBar.vue       # 顶部品牌栏（含滚动后出现的紧凑搜索框）
 │   │   ├── SearchBox.vue       # Hero 大搜索框
 │   │   ├── EngineSelect.vue    # 搜索引擎下拉（两个搜索框共用，默认站内）
+│   │   ├── LinkGuardDialog.vue # 外链跳转确认弹窗（全站唯一实例）
 │   │   ├── SideNav.vue         # 分类导航（桌面侧栏 / 移动端滑动条）
 │   │   ├── CategorySection.vue # 分类区块（吸顶标题 + 卡片网格）
 │   │   ├── SiteCard.vue        # 网站卡片（logo 降级 + 命中高亮）
@@ -264,7 +270,8 @@ vue-nav/
 │   │   ├── useSearch.ts        # 站内搜索过滤逻辑
 │   │   ├── useEngines.ts       # 引擎管理（选择持久化 / 跳转 URL 构建）
 │   │   ├── useTheme.ts         # 明暗主题（持久化 / 系统偏好 / 应用 data-theme）
-│   │   └── useColumnCount.ts   # 网格列数响应式计算（每行 5 卡 / 断点降级）
+│   │   ├── useColumnCount.ts   # 网格列数响应式计算（每行 5 卡 / 断点降级）
+│   │   └── useLinkGuard.ts     # 外链跳转确认（单例状态 + 跳转决策）
 │   ├── data/
 │   │   ├── sites.json          # ★ 网站数据配置
 │   │   ├── search-engines.json # ★ 搜索引擎配置
@@ -304,11 +311,12 @@ vue-nav/
 | 十二 | 全站毛玻璃 + 顶栏自定义配置 | `pnpm test`（47 个用例）+ vite/vue-tsc 构建通过 + CSS 产物核对 |
 | 十三 | 顶栏导航链接示例 + 卡片文本悬停滚动 | `pnpm test` + vite/vue-tsc 构建通过 + 产物核对 |
 | 十四 | 图标改为 UIcon 运行时渲染 + iconfont 支持 | `pnpm test`（49 个用例）+ 构建通过 + 图标数据产物核对 |
+| 十五 | 外链跳转确认弹窗 | `pnpm test`（56 个用例）+ 构建通过 + 无头浏览器实测（遮挡 / 取消 / 跳转 / Esc / 点外部） |
 
 **提交前固定四连**（也是 CI 流水线执行的检查）：
 
 ```bash
-pnpm test        # 单元测试（47 个用例：搜索过滤 / 高亮切分 / 引擎管理 / URL 构建 / 主题切换 / 资源解析 / 图标类名 / 网格断点）
+pnpm test        # 单元测试（56 个用例：搜索过滤 / 高亮切分 / 引擎管理 / URL 构建 / 主题切换 / 资源解析 / 图标类名 / 网格断点 / 跳转确认）
 pnpm typecheck   # TypeScript 类型检查
 pnpm build       # 生产构建（先 vite build 生成 Nuxt UI 类型声明，再 vue-tsc 类型检查）
 pnpm preview     # 本地预览产物抽查
@@ -346,6 +354,10 @@ favicon 服务偶发抽风时会降级为首字母头像。想彻底解决可在
 它是 [Iconify](https://iconify.design/) 的图标名，格式为 `i-<图标集>-<图标名>`：`i-` 是前缀、`lucide` 是[图标集](https://lucide.dev/icons/)名（内置 1900+ 矢量图标）、`book-open` 是该集合里的图标名。找图标直接去 Lucide 官网搜索，页面上标的 `book-open` 对应配置里写 `i-lucide-book-open`。
 Iconify 与 [iconfont](https://www.iconfont.cn/) 是两套彼此独立的体系（前者是聚合 200+ 图标集的 SVG 数据，后者是阿里的字体图标库），名字不通用，所以在 iconfont 上搜不到 Lucide 的名字。本项目用到的图标由 `@iconify-json/lucide` 在本地提供，离线可用。
 想改用其它图标集：`pnpm add -D @iconify-json/tabler` 装上集合后即可写 `i-tabler-book`（集合名就是包名去掉 `@iconify-json/` 的部分）；跨集合搜索图标名可用 [Iconify 图标搜索](https://icon-sets.iconify.design/)。
+
+**Q：新增弹窗 / 遮罩类组件时，为什么会被页面内容盖住？**
+Nuxt UI 的 modal 主题（`overlay` / `content`）**本身不含 z-index**，而本项目的内容容器 `#top` 设了 `z-index: 1`（用于压住 `z-index: 0` 的毛玻璃底图 `.app-backdrop`）并因此形成层叠上下文。弹窗会 portal 到 `body` 下、`z-index` 为 `auto`，于是整个页面内容都盖在它上面 —— 表现为弹窗"半透明"、按钮点不动。
+解法是给弹窗显式抬高层级，`LinkGuardDialog.vue` 里通过 `:ui="{ overlay: 'z-70', content: 'z-70 max-w-md' }"` 指定（高于项目内最高的 `z-60`）。**以后新增任何全屏遮罩 / 弹窗都要做同样处理。**
 
 ## 📄 License
 

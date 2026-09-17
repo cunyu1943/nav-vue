@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue'
 
 
 import MarqueeText from '@/components/MarqueeText.vue'
+import { useLinkGuard } from '@/composables/useLinkGuard'
 import type { SiteItem } from '@/types'
 import { letterAvatar, resolveLogo } from '@/utils/logo'
 
@@ -11,6 +12,9 @@ const props = defineProps<{
   /** 搜索关键词（用于命中高亮，可选） */
   keyword?: string
 }>()
+
+/** 点击卡片先弹窗确认，再由用户决定是否跳转（外链安全提示） */
+const { requestNavigation } = useLinkGuard()
 
 /** 鼠标是否悬停在卡片上（用于触发名称 / 描述滚动） */
 const hovered = ref(false)
@@ -65,6 +69,7 @@ const tags = computed(() =>
     target="_blank"
     rel="noopener noreferrer"
     :title="`${site.name} — ${site.url}`"
+    @click.prevent="requestNavigation(site.url)"
     @mouseenter="hovered = true"
     @mouseleave="hovered = false"
   >

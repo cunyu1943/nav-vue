@@ -27,10 +27,11 @@
   --glass-alpha-panel: 76%; /* 侧栏等面板（页面底色） */
   --glass-alpha-strong: 86%; /* 顶栏 / 吸顶标题（需更好遮挡滚动内容） */
 
-  /* 背景光斑与网格：毛玻璃的“被模糊对象”，明暗各一套 */
-  --glass-glow-a: rgba(76, 110, 245, 0.18);
-  --glass-glow-b: rgba(139, 92, 246, 0.15);
-  --glass-glow-c: rgba(34, 211, 238, 0.12);
+  /* 背景光斑与网格：毛玻璃的“被模糊对象”，明暗各一套。
+     取与品牌绿同色系的三档（绿 / 青绿 / 薄荷），保证整页色调统一 */
+  --glass-glow-a: rgba(79, 192, 141, 0.18);
+  --glass-glow-b: rgba(20, 184, 166, 0.14);
+  --glass-glow-c: rgba(134, 239, 172, 0.12);
   --glass-grid: rgba(24, 28, 36, 0.045);
 }
 
@@ -38,7 +39,8 @@
    品牌主色 + 参考一为导航的明暗观感（页面深底、卡片浅一档、弱边框）。
    覆盖须位于 @import "@nuxt/ui" 之后；暗色切换由 <html class="dark"> 驱动 */
 :root {
-  --ui-primary: #4c6ef5;
+  /* 主色：Vue 官方品牌绿（按钮 / 链接 / 导航 / 卡片描边等语义色均由它派生） */
+  --ui-primary: #4fc08d;
 
   --ui-bg: #f5f6f8;
   --ui-bg-muted: #eef0f2;
@@ -58,7 +60,8 @@
 }
 
 .dark {
-  --ui-primary: #6a8dff;
+  /* 暗色下提亮一档，保证深色底上的对比度 */
+  --ui-primary: #5fd3a0;
 
   --ui-bg: #161616;
   --ui-bg-muted: #1a1a1a;
@@ -77,9 +80,9 @@
   --ui-text-inverted: #161616;
 
   /* 暗色下光斑更亮、网格更淡，避免玻璃显得脏 */
-  --glass-glow-a: rgba(106, 141, 255, 0.24);
-  --glass-glow-b: rgba(154, 108, 255, 0.18);
-  --glass-glow-c: rgba(34, 211, 238, 0.1);
+  --glass-glow-a: rgba(79, 192, 141, 0.26);
+  --glass-glow-b: rgba(45, 212, 191, 0.18);
+  --glass-glow-c: rgba(134, 239, 172, 0.1);
   --glass-grid: rgba(255, 255, 255, 0.035);
 }
 

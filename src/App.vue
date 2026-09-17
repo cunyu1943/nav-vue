@@ -5,6 +5,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import BackTop from '@/components/BackTop.vue'
 import CategorySection from '@/components/CategorySection.vue'
 import HeaderBar from '@/components/HeaderBar.vue'
+import LinkGuardDialog from '@/components/LinkGuardDialog.vue'
 import SearchBox from '@/components/SearchBox.vue'
 import SideNav from '@/components/SideNav.vue'
 import { navConfig, siteConfig, useSiteData } from '@/composables/useSiteData'
@@ -154,5 +155,8 @@ onBeforeUnmount(() => {
 
       <BackTop v-model:visible="showBackTop" />
     </div>
+
+    <!-- 外链跳转确认弹窗（全站唯一实例，由 useLinkGuard 单例驱动） -->
+    <LinkGuardDialog />
   </UApp>
 </template>

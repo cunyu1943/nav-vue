@@ -1,9 +1,9 @@
 {
   "title": "Vue Nav",
-  "subtitle": "简洁高效的个人网址导航",
+  "subtitle": "",
   "logo": "favicon.svg",
   "icp": "",
-  "footer": "Powered By ©️<a href='https://github.com/cunyu1943' target='_blank'>村雨遥</a>",
+  "footer": "Powered By ©️ <a href='https://github.com/cunyu1943' target='_blank'>村雨遥</a>",
   "defaultSearchEngine": "site",
   "nav": {
     "sticky": true,
@@ -15,17 +15,12 @@
     "showSearch": true,
     "showThemeToggle": true,
     "showSideNav": true,
+    "github": "https://github.com/cunyu1943/nav-vue",
     "links": [
       {
-        "name": "知乎",
+        "name": "我的主页",
         "url": "https://cunyu1943.github.io",
-        "icon": "iconfont icon-zhihu",
-        "external": true
-      },
-      {
-        "name": "JavaPark",
-        "url": "https://cunyu1943.github.io",
-        "icon": "i-lucide-globe",
+        "icon": "i-lucide-house-heart",
         "external": true
       },
       {

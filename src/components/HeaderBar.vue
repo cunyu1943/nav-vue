@@ -167,17 +167,35 @@ function clearKeyword() {
         </form>
       </Transition>
 
-      <UButton
-        v-if="navConfig.showThemeToggle"
-        class="shrink-0"
-        color="neutral"
-        variant="ghost"
-        size="md"
-        :icon="toggleIcon"
-        :aria-label="toggleLabel"
-        :title="toggleLabel"
-        @click="toggleTheme"
-      />
+      <!-- 右侧操作区：两个按钮成组，避免被 justify-between 分散到中间 -->
+      <div class="flex shrink-0 items-center gap-0.5">
+        <!-- 项目 GitHub 入口：配置了 config.json 的 nav.github 才显示；极窄屏让位给搜索框 -->
+        <UButton
+          v-if="navConfig.github"
+          class="max-[360px]:hidden shrink-0"
+          color="neutral"
+          variant="ghost"
+          size="md"
+          icon="i-lucide-github"
+          :to="navConfig.github"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="项目 GitHub 仓库"
+          title="项目 GitHub 仓库"
+        />
+
+        <UButton
+          v-if="navConfig.showThemeToggle"
+          class="shrink-0"
+          color="neutral"
+          variant="ghost"
+          size="md"
+          :icon="toggleIcon"
+          :aria-label="toggleLabel"
+          :title="toggleLabel"
+          @click="toggleTheme"
+        />
+      </div>
     </div>
   </header>
 </template>
