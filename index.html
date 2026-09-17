@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/nav-vue/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Nav Vue — 简洁高效的个人网址导航，支持站内搜索与多搜索引擎切换" />
+  <script>
+    // 防主题闪烁：在页面渲染前确定主题（用户选择 > 系统偏好）
+    ; (function () {
+      var t = null
+      try {
+        t = localStorage.getItem('vue-nav.theme')
+      } catch (e) { }
+      if (t !== 'dark' && t !== 'light') {
+        t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      }
+      // Nuxt UI 的 dark 变体基于 .dark class
+      document.documentElement.classList.toggle('dark', t === 'dark')
+    })()
+  </script>
+  <title>Nav Vue · 网址导航</title>
+  <script type="module" crossorigin src="/nav-vue/assets/index-CExd_Bic.js"></script>
+  <link rel="stylesheet" crossorigin href="/nav-vue/assets/index-C2yqWXQf.css">
+</head>
+
+<body>
+  <div id="app"></div>
+</body>
+
+</html>
