@@ -3,6 +3,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 
 import NavIcon from '@/components/NavIcon.vue'
 import type { NavLink } from '@/types'
+import { hasChildren, linkRel, linkTarget } from '@/utils/nav'
 
 const props = defineProps<{
   /** 自定义导航链接（来自 config.json 的 nav.links） */
@@ -14,11 +15,6 @@ const rootRef = ref<HTMLElement | null>(null)
 
 /** 当前展开的一级菜单下标（-1 表示全部收起） */
 const openIndex = ref(-1)
-
-/** 是否配置了子菜单 */
-function hasChildren(link?: NavLink): boolean {
-  return !!link?.children?.length
-}
 
 function toggle(index: number) {
   openIndex.value = openIndex.value === index ? -1 : index
@@ -74,22 +70,14 @@ function gridStyle(link: NavLink) {
   }
 }
 
-/** 站外链接默认新标签页打开 */
-function linkTarget(link: NavLink) {
-  return link.external === false ? undefined : '_blank'
-}
-
-function linkRel(link: NavLink) {
-  return link.external === false ? undefined : 'noopener noreferrer'
-}
 </script>
 
 <template>
-  <!-- 自定义导航：紧跟在品牌区之后；窄屏（<640px）隐藏，避免挤压搜索框 -->
+  <!-- 自定义导航：紧跟在品牌区之后；lg 断点（<900px）以下隐藏，改由 MobileNav 的汉堡菜单承载 -->
   <nav
     v-if="links.length"
     ref="rootRef"
-    class="hidden min-w-0 items-center gap-0.5 md:flex"
+    class="hidden min-w-0 items-center gap-0.5 lg:flex"
     aria-label="自定义导航"
   >
     <div

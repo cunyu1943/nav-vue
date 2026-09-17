@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
+import NavIcon from '@/components/NavIcon.vue'
 import type { SiteCategory } from '@/types'
+import { normalizeIcon } from '@/utils/icon'
 
 const props = defineProps<{
   categories: SiteCategory[]
@@ -15,20 +17,6 @@ const props = defineProps<{
 
 /** 是否为桌面侧栏形态 */
 const isSidebar = computed(() => props.variant !== 'chips')
-
-const ICON_MAP: Record<string, string> = {
-  star: '⭐',
-  tool: '🛠️',
-  book: '📚',
-  palette: '🎨',
-  news: '📰',
-  cloud: '☁️',
-  code: '💻',
-}
-
-function iconOf(id?: string): string {
-  return (id && ICON_MAP[id]) || '📌'
-}
 </script>
 
 <template>
@@ -44,7 +32,7 @@ function iconOf(id?: string): string {
           class="flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm text-default transition-colors hover:bg-primary/10 hover:text-primary"
           :href="`#${c.id}`"
         >
-          <span class="text-[15px]">{{ iconOf(c.icon) }}</span>
+          <NavIcon :icon="normalizeIcon(c.icon)" :name="c.name" size-class="size-4" />
           {{ c.name }}
           <span class="ml-auto text-[11px] text-dimmed">{{ c.sites.length }}</span>
         </a>
@@ -57,10 +45,11 @@ function iconOf(id?: string): string {
     <a
       v-for="c in categories"
       :key="c.id"
-      class="glass shrink-0 rounded-full px-3.5 py-1.5 text-xs text-default ring-1 ring-default transition-colors hover:text-primary hover:ring-primary"
+      class="glass inline-flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs text-default ring-1 ring-default transition-colors hover:text-primary hover:ring-primary"
       :href="`#${c.id}`"
     >
-      {{ iconOf(c.icon) }} {{ c.name }}
+      <NavIcon :icon="normalizeIcon(c.icon)" :name="c.name" size-class="size-3.5" />
+      {{ c.name }}
     </a>
   </nav>
 </template>

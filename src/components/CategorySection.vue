@@ -2,8 +2,10 @@
 import { computed, ref } from 'vue'
 
 
+import NavIcon from '@/components/NavIcon.vue'
 import type { SiteCategory } from '@/types'
 import { useColumnCount } from '@/composables/useColumnCount'
+import { normalizeIcon } from '@/utils/icon'
 import SiteCard from './SiteCard.vue'
 
 const props = defineProps<{
@@ -13,21 +15,6 @@ const props = defineProps<{
   /** 是否处于搜索状态：搜索结果全部展开、不折叠 */
   searching?: boolean
 }>()
-
-/** 分类图标映射（轻量方案，无图标库依赖） */
-const ICON_MAP: Record<string, string> = {
-  star: '⭐',
-  tool: '🛠️',
-  book: '📚',
-  palette: '🎨',
-  news: '📰',
-  cloud: '☁️',
-  code: '💻',
-}
-
-function iconOf(id?: string): string {
-  return (id && ICON_MAP[id]) || '📌'
-}
 
 /** 折叠状态：每个分类默认折叠（超过阈值时） */
 const collapsed = ref(true)
@@ -64,7 +51,11 @@ function toggle() {
     <!-- 标题行：左侧图标+标题+数量，右侧醒目的展开/收起按钮（折叠时提示更明显） -->
     <header class="glass-strong sticky top-(--header-height) z-5 mb-3.5 flex items-center justify-between gap-3 rounded-lg px-1 py-2.5">
       <h2 class="flex items-center gap-2 text-[17px] font-bold text-highlighted">
-        <span class="text-lg">{{ iconOf(category.icon) }}</span>
+        <NavIcon
+          :icon="normalizeIcon(category.icon)"
+          :name="category.name"
+          size-class="size-[18px]"
+        />
         {{ category.name }}
         <UBadge color="neutral" variant="soft" size="sm">
           {{ category.sites.length }}

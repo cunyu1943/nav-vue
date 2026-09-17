@@ -3,10 +3,11 @@ import { computed, ref } from 'vue'
 
 
 import EngineSelect from '@/components/EngineSelect.vue'
+import MobileNav from '@/components/MobileNav.vue'
 import NavMenu from '@/components/NavMenu.vue'
 import { navConfig, siteConfig } from '@/composables/useSiteData'
 import { useTheme } from '@/composables/useTheme'
-import type { SearchEngine } from '@/types'
+import type { NavLink, SearchEngine } from '@/types'
 
 const logoSrc = `${import.meta.env.BASE_URL}${siteConfig.logo}`
 
@@ -24,6 +25,19 @@ const showBrand = computed(
 
 /** 自定义导航链接（为空时 NavMenu 自身不渲染） */
 const navLinks = computed(() => navConfig.links)
+
+/**
+ * 移动端菜单链接：在导航链接末尾追加项目 GitHub 入口
+ *
+ * 顶栏那个 GitHub 图标只在 ≥640px 显示（窄屏要优先保证搜索框宽度），
+ * 这里把它补进移动端菜单，避免窄屏完全找不到入口。
+ * URL 与图标直接复用 nav.github，不需要在 links 里重复配置。
+ */
+const mobileNavLinks = computed<NavLink[]>(() => {
+  const links = navLinks.value
+  if (!navConfig.github) return links
+  return [...links, { name: '本仓库', url: navConfig.github, icon: 'i-lucide-github' }]
+})
 
 /** 顶栏紧凑搜索框：与 Hero 大搜索框共享关键词 / 引擎状态 */
 const keyword = defineModel<string>('keyword', { required: true })
@@ -167,12 +181,15 @@ function clearKeyword() {
         </form>
       </Transition>
 
-      <!-- 右侧操作区：两个按钮成组，避免被 justify-between 分散到中间 -->
+      <!-- 右侧操作区：按钮成组，避免被 justify-between 分散到中间 -->
       <div class="flex shrink-0 items-center gap-0.5">
-        <!-- 项目 GitHub 入口：配置了 config.json 的 nav.github 才显示；极窄屏让位给搜索框 -->
+        <!-- 移动端导航菜单：桌面断点起自动隐藏（由 NavMenu 接管），额外带上项目 GitHub 入口 -->
+        <MobileNav :links="mobileNavLinks" />
+
+        <!-- 项目 GitHub 入口：配置了 config.json 的 nav.github 才显示；窄屏收起，把宽度让给搜索框 -->
         <UButton
           v-if="navConfig.github"
-          class="max-[360px]:hidden shrink-0"
+          class="hidden shrink-0 md:inline-flex"
           color="neutral"
           variant="ghost"
           size="md"

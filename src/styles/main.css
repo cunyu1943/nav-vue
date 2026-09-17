@@ -26,6 +26,7 @@
   --glass-alpha-elevated: 72%; /* 卡片 / 搜索框（elevated 底色） */
   --glass-alpha-panel: 76%; /* 侧栏等面板（页面底色） */
   --glass-alpha-strong: 86%; /* 顶栏 / 吸顶标题（需更好遮挡滚动内容） */
+  --glass-alpha-modal: 78%; /* 弹窗面板：需承载要阅读的提示文字，比卡片略实 */
 
   /* 背景光斑与网格：毛玻璃的“被模糊对象”，明暗各一套。
      取与品牌绿同色系的三档（绿 / 青绿 / 薄荷），保证整页色调统一 */
@@ -162,9 +163,25 @@ body {
   backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
 }
 
+/* 弹窗面板（普通类，刻意不用 @utility）
+   原因：Nuxt UI 的 modal 主题自带 bg-default，会与本类的 background-color 冲突。
+   @utility 与 CSS 工具类同处 utilities 层，层内顺序由 Tailwind 决定，压不过它；
+   而非分层的普通样式在层叠规则中优先于任何 @layer，才能稳定覆盖。
+   元素上另外还带有 modal 主题的 bg-default，请勿删除这里的 background-color。 */
+.glass-modal {
+  background-color: color-mix(
+    in oklab,
+    var(--ui-bg-elevated) var(--glass-alpha-modal),
+    transparent
+  );
+  -webkit-backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
+}
+
 /* 不支持 backdrop-filter 的浏览器：回退为不透明底色，保证可读性 */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .glass,
+  .glass-modal,
   .glass-panel,
   .glass-strong {
     background-color: var(--ui-bg-elevated);

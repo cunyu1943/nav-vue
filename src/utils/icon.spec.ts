@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { isIconifyName, isImageIcon, resolveAssetUrl } from '@/utils/icon'
+import { isIconifyName, isImageIcon, normalizeIcon, resolveAssetUrl } from '@/utils/icon'
 
 describe('resolveAssetUrl', () => {
   it('空值返回空串', () => {
@@ -66,5 +66,37 @@ describe('isIconifyName', () => {
   it('缺少图标名的残缺写法返回 false', () => {
     expect(isIconifyName('i-lucide-')).toBe(false)
     expect(isIconifyName('lucide-github')).toBe(false)
+  })
+})
+
+describe('normalizeIcon', () => {
+  it('旧的分类短名映射为等价的 Iconify 名', () => {
+    expect(normalizeIcon('star')).toBe('i-lucide-star')
+    expect(normalizeIcon('tool')).toBe('i-lucide-tool-case')
+    expect(normalizeIcon('book')).toBe('i-lucide-book-open')
+    expect(normalizeIcon('palette')).toBe('i-lucide-palette')
+    expect(normalizeIcon('news')).toBe('i-lucide-newspaper')
+    expect(normalizeIcon('cloud')).toBe('i-lucide-cloud')
+    expect(normalizeIcon('code')).toBe('i-lucide-code')
+  })
+
+  it('三种标准写法原样返回（Iconify / 字体图标类名 / 图片地址）', () => {
+    expect(normalizeIcon('i-lucide-github')).toBe('i-lucide-github')
+    expect(normalizeIcon('iconfont icon-github')).toBe('iconfont icon-github')
+    expect(normalizeIcon('logos/vue.svg')).toBe('logos/vue.svg')
+    expect(normalizeIcon('https://example.com/a.png')).toBe(
+      'https://example.com/a.png',
+    )
+  })
+
+  it('空值返回 undefined（不渲染图标）', () => {
+    expect(normalizeIcon()).toBeUndefined()
+    expect(normalizeIcon('')).toBeUndefined()
+    expect(normalizeIcon('   ')).toBeUndefined()
+  })
+
+  it('先去除首尾空格再归一化', () => {
+    expect(normalizeIcon('  star  ')).toBe('i-lucide-star')
+    expect(normalizeIcon('  i-lucide-star  ')).toBe('i-lucide-star')
   })
 })

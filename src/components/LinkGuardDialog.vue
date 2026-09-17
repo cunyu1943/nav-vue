@@ -17,7 +17,8 @@ const { open, pendingUrl, cancelNavigation, confirmNavigation } = useLinkGuard()
     title="温馨提示"
     :ui="{
       overlay: 'z-70',
-      content: 'z-70 max-w-md',
+      // glass-modal：面板半透明 + 背景模糊，与全站玻璃质感保持一致
+      content: 'z-70 max-w-md glass-modal',
       // 头部为 flex 布局，wrapper 撑满后标题才能在整个头部里居中
       wrapper: 'flex-1',
       title: 'text-center',

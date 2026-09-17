@@ -18,10 +18,10 @@
 - 🖼️ **灵活 Logo**：支持本地目录、在线 URL、自动 favicon 服务三级来源，加载失败自动降级为首字母头像
 - 📦 **纯静态**：构建产物为纯静态文件，无需后端；数据修改后无需改代码
 - 🚀 **自动部署**：内置 GitHub Actions 流水线，推送即自动测试 + 构建 + 发布
-- 🪟 **全站毛玻璃**：全局光斑 + 网格底图打底，顶栏 / 搜索框 / 网站卡片 / 侧边导航 / 吸顶标题统一玻璃质感；模糊半径与透明度集中在 `src/styles/main.css` 的 `--glass-*` 变量里调节
-- 🎛️ **导航栏可配置**：顶栏显示项（logo / 标题 / 副标题 / 紧凑搜索框 / 主题按钮）、高度、是否固定、自定义链接与**二级下拉菜单**全部由 `config.json` 的 `nav` 段驱动，菜单紧跟在站点 logo 之后靠左排列
+- 🪟 **全站毛玻璃**：全局光斑 + 网格底图打底，顶栏 / 搜索框 / 网站卡片 / 侧边导航 / 吸顶标题 / 跳转确认弹窗统一玻璃质感；模糊半径与透明度集中在 `src/styles/main.css` 的 `--glass-*` 变量里调节
+- 🎛️ **导航栏可配置**：顶栏显示项（logo / 标题 / 副标题 / 紧凑搜索框 / 主题按钮）、高度、是否固定、自定义链接与**二级下拉菜单**全部由 `config.json` 的 `nav` 段驱动；桌面端菜单紧跟在站点 logo 之后，窄屏自动收进**汉堡菜单**
 - 🔠 **悬停小动效**：鼠标移到卡片上时，名称与描述若超出一行被截断即左右往返滚动（未超出不滚动），同时 logo 转动一圈；两处动效均遵循系统「减少动态效果」偏好
-- 🎨 **图标三选一**：导航链接图标支持 Iconify 图标名、iconfont 字体图标（可自托管、离线可用）与图片，换图标只改 JSON
+- 🎨 **图标三选一**：顶栏导航链接与**分类图标**共用同一种写法 —— Iconify 图标名、iconfont 字体图标（可自托管、离线可用）与图片，换图标只改 JSON
 - ✅ **质量保障**：vitest 单元测试覆盖搜索、引擎与主题核心逻辑
 
 ## 🛠️ 技术栈
@@ -77,7 +77,7 @@ pnpm preview
     {
       "id": "recommend",        // 分类唯一 id，用作页内锚点（#recommend）
       "name": "常用推荐",        // 分类展示名
-      "icon": "star",           // 图标名（可选）：star/tool/book/palette/news/cloud/code
+      "icon": "i-lucide-star",  // 分类图标（可选，写法见下方说明）
       "sites": [
         {
           "name": "Vue.js 官方文档",          // 网站名
@@ -92,7 +92,12 @@ pnpm preview
 }
 ```
 
-> 新增分类记得在 `src/components/SideNav.vue` 与 `CategorySection.vue` 顶部的 `ICON_MAP` 中补充图标映射（不补则显示默认 📌）。
+> **分类图标写法**（与顶栏导航链接完全一致，可选；不写则不显示图标）：
+> 1. **Iconify 图标名**：`"i-lucide-star"`（推荐）。图标名查 [Lucide](https://lucide.dev/icons/)，由 `vite.config.ts` 的 `icon.clientBundle.scan` 从 JSON 中扫描并打包进本地图标数据，**离线可用**
+> 2. **iconfont 字体图标**：先在 `nav.iconfontUrl` 配置样式表，再写 `"icon": "iconfont icon-xxx"`
+> 3. **图片**：相对 `public/` 的路径（`"logos/vue.svg"`）或完整 URL
+>
+> 早期版本的短名写法（`star` / `tool` / `book` / `palette` / `news` / `cloud` / `code`，过去渲染为 emoji）仍可用：`src/utils/icon.ts` 里的 `LEGACY_ICON_ALIASES` 会把它们映射为等价的 Iconify 图标。新配置建议直接用第 1 种写法。
 
 ### 2. 网站 Logo — 三种配置方式
 
@@ -207,10 +212,11 @@ pnpm preview
   3. **图片**：`"logos/vue.svg"`（相对 `public/`）或完整 URL，加载失败自动隐藏、只留文字
 - **默认值**：不写 `nav` 段时，上述开关均为 `true`、`height` 为 `56`、`links` 为空数组；默认值集中定义在 `src/composables/useSiteData.ts` 的 `DEFAULT_NAV`
 - **二级下拉菜单**：给链接加 `children` 数组即变为下拉菜单（鼠标悬停或点击展开，Esc / 点击面板外收起）；子项超过 6 个时面板自动分列（每列最多 6 项、最多 3 列，纵向填充）
+- **窄屏 / 平板菜单**：`<900px` 时自定义导航自动切换为顶栏右侧的**汉堡按钮**，点击展开横跨整屏的玻璃面板，有子菜单的一级项点击展开 / 收起；点链接、点面板外、按 Esc、或视口放大到 900px 以上都会自动收起。`≥900px` 恢复为 logo 旁的横向内联导航（断点即 Tailwind 的 `lg`）
 - **菜单位置**：自定义导航紧跟在 logo / 标题之后靠左排列，不会被推到顶栏中间
-- **GitHub 入口**：`github` 填地址后，主题切换按钮左侧出现 GitHub 图标（新标签页打开，带 `rel="noopener noreferrer"`）；留空或不写即完全隐藏。它与主题按钮同处右侧按钮组，`<360px` 的极窄屏自动隐藏，把宽度让给搜索框
+- **GitHub 入口**：`github` 填地址后，主题切换按钮左侧出现 GitHub 图标（新标签页打开，带 `rel="noopener noreferrer"`）；留空或不写即完全隐藏。图标在 `≥640px` 显示，`<640px` 收进移动端菜单（名称「本仓库」）以免占用搜索框宽度；菜单项无需在 `links` 里重复配置
 - **顶栏高度**：`height` 以 `--header-height` 变量下发全站，侧栏粘性偏移、内容区让位、分类锚点滚动留白都会自动跟随；`sticky` 为 `false` 时该变量自动归零
-- **毛玻璃强度**：想调节玻璃的通透感，改 `src/styles/main.css` 中 `--glass-blur` / `--glass-saturate` / `--glass-alpha-*` 即可，全站玻璃元素一起生效；背景光斑与网格由 `--glass-glow-a/b/c`、`--glass-grid` 控制（明暗主题各一套）
+- **毛玻璃强度**：想调节玻璃的通透感，改 `src/styles/main.css` 中 `--glass-blur` / `--glass-saturate` / `--glass-alpha-*` 即可，全站玻璃元素一起生效（弹窗面板用 `--glass-alpha-modal`）；背景光斑与网格由 `--glass-glow-a/b/c`、`--glass-grid` 控制（明暗主题各一套）
 
 ## 📦 部署到 GitHub Pages
 
@@ -261,6 +267,10 @@ vue-nav/
 │   │   ├── SearchBox.vue       # Hero 大搜索框
 │   │   ├── EngineSelect.vue    # 搜索引擎下拉（两个搜索框共用，默认站内）
 │   │   ├── LinkGuardDialog.vue # 外链跳转确认弹窗（全站唯一实例）
+│   │   ├── NavMenu.vue         # 顶栏自定义导航（桌面端内联 + 二级下拉菜单）
+│   │   ├── MobileNav.vue       # 顶栏自定义导航（窄屏汉堡菜单 + 可展开子项）
+│   │   ├── NavIcon.vue         # 图标渲染（Iconify / iconfont / 图片三选一，顶栏与分类共用）
+│   │   ├── MarqueeText.vue     # 单行文本悬停往返滚动（卡片名称 / 描述）
 │   │   ├── SideNav.vue         # 分类导航（桌面侧栏 / 移动端滑动条）
 │   │   ├── CategorySection.vue # 分类区块（吸顶标题 + 卡片网格）
 │   │   ├── SiteCard.vue        # 网站卡片（logo 降级 + 命中高亮）

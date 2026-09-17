@@ -3,7 +3,7 @@
     {
       "id": "recommend",
       "name": "常用推荐",
-      "icon": "star",
+      "icon": "i-lucide-star",
       "sites": [
         {
           "name": "Vue.js 官方文档",
@@ -76,15 +76,6 @@
           ]
         },
         {
-          "name": "JSON 格式化",
-          "url": "https://jsonhero.io",
-          "description": "在线 JSON 查看、校验与格式化工具",
-          "tags": [
-            "JSON",
-            "开发"
-          ]
-        },
-        {
           "name": "Excalidraw",
           "url": "https://excalidraw.com",
           "description": "手绘风格的在线白板与图表绘制工具",
@@ -94,7 +85,7 @@
           ]
         },
         {
-          "name": "Xiaohongshu 表情包",
+          "name": "发表情",
           "url": "https://www.fabiaoqing.com",
           "description": "发表情——海量表情包搜索与下载",
           "tags": [
@@ -107,7 +98,7 @@
     {
       "id": "learn",
       "name": "学习教程",
-      "icon": "book",
+      "icon": "i-lucide-book-open",
       "sites": [
         {
           "name": "掘金",
@@ -159,7 +150,7 @@
     {
       "id": "design",
       "name": "设计素材",
-      "icon": "palette",
+      "icon": "i-lucide-palette",
       "sites": [
         {
           "name": "Dribbble",
@@ -211,7 +202,7 @@
     {
       "id": "news",
       "name": "社区资讯",
-      "icon": "news",
+      "icon": "i-lucide-newspaper",
       "sites": [
         {
           "name": "V2EX",
@@ -254,7 +245,7 @@
     {
       "id": "cloud",
       "name": "网盘云储",
-      "icon": "cloud",
+      "icon": "i-lucide-cloud",
       "sites": [
         {
           "name": "阿里云盘",
