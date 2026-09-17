@@ -1,6 +1,6 @@
-# Vue Nav
+# Nav Vue
 
-简洁高效的个人网址导航站，基于 **Vue 3 + Vite + TypeScript** 构建，UI 风格参考 [一为导航](https://nav.iowen.cn/)。
+简洁高效的个人网址导航站，基于 **Vue 3 + Vite + TypeScript** 构建。
 
 支持**站内搜索**、**多搜索引擎切换**，数据完全由 JSON 配置驱动，可一键部署到 **GitHub Pages**。
 
@@ -151,7 +151,7 @@ pnpm preview
 
 ```jsonc
 {
-  "title": "Vue Nav",                 // 站点标题（导航栏 + Hero 区）
+  "title": "Nav Vue",                 // 站点标题（导航栏 + Hero 区）
   "subtitle": "简洁高效的个人网址导航", // 副标题
   "logo": "favicon.svg",              // 站点 logo，相对 public/ 目录
   "icp": "",                          // 备案号（可选，留空不显示；支持 HTML）
